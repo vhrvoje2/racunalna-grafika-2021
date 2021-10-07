@@ -1,0 +1,67 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Sinusoida</title>
+		<script>
+		  window.onload = slikaj;
+			
+			function slikaj() {
+				var platno1 = document.getElementById("slika1");
+				if(!platno1) alert("Greška - nema platna!");
+				var w = platno1.width;
+				var h = platno1.height;
+				var g = platno1.getContext("2d");
+
+                var xMin = 0;
+                var xMax = 2 * Math.PI;
+                var yMin = -1;
+                var yMax = 1;
+				var sx = w / (xMax - xMin);
+				var sy = (0 - h) / (yMax - yMin);
+				var px = -sx * xMin;
+				var py = -sy * yMax;
+				var dxy = 0.25;
+				nacrtajOsi(g, w, h, px, py);
+				nacrtajSinusoidu(g, xMin, yMin, xMax, yMax, sx, sy, px, py, dxy);
+			}
+		
+			function nacrtajOsi(g, w, h, px, py){
+				g.strokeStyle = "black";
+				g.beginPath();
+				g.moveTo(px, 0);
+				g.lineTo(px, h);
+				g.stroke();
+
+				g.beginPath();
+				g.moveTo(0, py);
+				g.lineTo(w, py);
+				g.stroke();
+			}
+			
+			function nacrtajSinusoidu(g, xMin, yMin, xMax, yMax, sx, sy, px, py, dxy){
+				g.beginPath();
+				g.strokeStyle = "red";
+				for (var x=xMin; x<=xMax; x+=dxy){
+					var x_ = sx * x + px;
+					for (var y=yMin; y<=yMax; y+=dxy){
+						var y_ = Math.sin(x);
+						var y_ = sy * y_ + py;
+						g.lineTo(x_, y_);
+					}
+				}
+				g.stroke()
+			}
+		</script>
+	</head>
+
+	<body>
+		<h1>Sinusoida</h1>	
+		<div>
+			<canvas id="slika1" width="500" height="500" style="border:5px solid black">
+				Vaš preglednik ne podržava HTML5 canvas.
+			</canvas>
+		</div>
+	</body>
+</html>
