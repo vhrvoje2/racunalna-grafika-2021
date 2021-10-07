@@ -1,0 +1,42 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Mreža</title>
+		<script>
+		  window.onload = slikaj;
+			
+			function slikaj() {
+				var platno1 = document.getElementById("slika1");
+				if(!platno1) alert("Greška - nema platna!");
+				var w = platno1.width;
+				var h = platno1.height;
+				var g = platno1.getContext("2d");
+                dx = w / 10;
+                dy = h / 10;
+
+				g.beginPath();
+                for (var x=dx; x <= w; x+=dx){
+                    g.moveTo(x, 0);
+                    g.lineTo(x, h);
+                }
+                for (var y=dy; y <= h; y+=dy){
+                    g.moveTo(0, y);
+                    g.lineTo(w, y);
+                }
+				g.strokeStyle = "red";
+				g.stroke();
+			}
+		</script>
+	</head>
+
+	<body>
+		<h1>Mreža</h1>	
+		<div>
+			<canvas id="slika1" width="500" height="500" style="border:5px solid black">
+				Vaš preglednik ne podržava HTML5 canvas.
+			</canvas>
+		</div>
+	</body>
+</html>

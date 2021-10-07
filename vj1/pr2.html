@@ -1,0 +1,48 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Parabola</title>
+		<script>
+		  window.onload = slikaj;
+			
+			function slikaj() {
+				var platno1 = document.getElementById("slika1");
+				if(!platno1) alert("Greška - nema platna!");
+				var w = platno1.width;
+				var h = platno1.height;
+				var g = platno1.getContext("2d");
+                var minX = -5;
+				var minY = -5;
+				var maxY = 5;
+                var maxX = 5;
+				var canvasMidX = w / 2;
+				var canvasMidY = h / 2;
+
+				g.beginPath();
+                g.moveTo(canvasMidX, 0);
+                g.lineTo(canvasMidX, h);
+				g.strokeStyle = "white";
+				g.stroke();
+
+				g.beginPath();
+                g.moveTo(0, canvasMidY);
+                g.lineTo(w, canvasMidX);
+				g.strokeStyle = "white";
+				g.stroke();
+				
+				
+			}
+		</script>
+	</head>
+
+	<body>
+		<h1>Parabola</h1>	
+		<div>
+			<canvas id="slika1" width="500" height="500" style="border:5px solid black">
+				Vaš preglednik ne podržava HTML5 canvas.
+			</canvas>
+		</div>
+	</body>
+</html>
