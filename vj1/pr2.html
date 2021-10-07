@@ -13,26 +13,44 @@
 				var w = platno1.width;
 				var h = platno1.height;
 				var g = platno1.getContext("2d");
-                var minX = -5;
-				var minY = -5;
-				var maxY = 5;
-                var maxX = 5;
-				var canvasMidX = w / 2;
-				var canvasMidY = h / 2;
 
+                var xMin = yMin = -5;
+                var xMax = yMax = 5;
+				var sx = w / (xMax - xMin);
+				var sy = (0 - h) / (yMax - yMin);
+				var px = -sx * xMin;
+				var py = -sy * yMax;
+				var dxy = 0.25;
+				nacrtajOsi(g, w, h, px, py);
+				nacrtajParabolu(g, xMin, yMin, xMax, yMax, sx, sy, px, py, dxy);
+			}
+		
+			function nacrtajOsi(g, w, h, canvasMidX, canvasMidY){
+				g.strokeStyle = "black";
 				g.beginPath();
-                g.moveTo(canvasMidX, 0);
-                g.lineTo(canvasMidX, h);
-				g.strokeStyle = "white";
+				g.moveTo(canvasMidX, 0);
+				g.lineTo(canvasMidX, h);
 				g.stroke();
 
 				g.beginPath();
-                g.moveTo(0, canvasMidY);
-                g.lineTo(w, canvasMidX);
-				g.strokeStyle = "white";
+				g.moveTo(0, canvasMidY);
+				g.lineTo(w, canvasMidY);
 				g.stroke();
-				
-				
+			}
+			
+			function nacrtajParabolu(g, xMin, yMin, xMax, yMax, sx, sy, px, py, dxy){
+				// y(x) = 0.5*x^2 - 3
+				g.beginPath();
+				g.strokeStyle = "red";
+				for (var x=xMin; x<=xMax; x+=dxy){
+					var x_ = sx * x + px;
+					for (var y=yMin; y<=yMax; y+=dxy){
+						var y_ = 0.5*x**2 - 3;
+						var y_ = sy * y_ + py;
+						g.lineTo(x_, y_);
+					}
+				}
+				g.stroke()
 			}
 		</script>
 	</head>
