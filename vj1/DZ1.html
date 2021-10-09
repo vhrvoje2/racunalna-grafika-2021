@@ -47,19 +47,16 @@
                 izracunajFaktorSkaliranja(){
                     this.sx = this.w / (this.xmax - this.xmin);
 				    this.sy = -this.h / (this.ymax - this.ymin);
-                    log(`Faktori skaliranja: sx=${this.sx}, sy=${this.sy}`);
                 }
                 
                 izracunajPomake(){
                     this.px = -this.sx * this.xmin;
                     this.py = -this.sy * this.ymax;
-                    log(`Pomaci: px=${this.px}, py=${this.py}`);
                 }
                 
                 transformirajKoordinate(x, y){
                     var gkx = this.sx * x + this.px;
                     var gky = this.sy * y + this.py;
-                    log(`Transformirane koordinate [${x}]->[${gkx}], [${y}]->[${gky}]`);
                     return [gkx, gky];
                 }
 
@@ -67,7 +64,6 @@
                     var [gkx, gky] = this.transformirajKoordinate(x, y);
                     this.g.beginPath();
                     this.g.moveTo(gkx, gky);
-                    log(`Olovka postavljena na (${gkx}, ${gky})`);
                 }
 
                 linijaDo(x, y){
@@ -77,7 +73,6 @@
 
                 koristiBoju(c){
                     this.g.strokeStyle = c;
-                    log(`Boja linije postavljena na ${c}!`);
                 }
 
                 povuciLiniju(){
@@ -103,45 +98,86 @@
                 }
             }
 
-            function log(message){
-                console.log(message);
-            }
-
             function crtajSinusoidu(){
                 var platno = document.getElementById("platnoSin");
                 gks = new GKS(platno, -1, 7, -1.5, 1.5);
                 gks.nacrtajOsi();
-
+                
+                var dxy = 0.01;
                 gks.koristiBoju("red");
                 gks.postaviNa(0, Math.sin(0));
-				for (var x=0; x<=2 * Math.PI; x+=0.01){
+				for (var x=0+dxy; x<=2 * Math.PI; x+=dxy){
                     let y = Math.sin(x);
                     gks.linijaDo(x, y);
 				}
                 gks.povuciLiniju();
             }
-
+            
             function crtajElipsu(){
                 var platno = document.getElementById("platnoElipsa");
                 gks = new GKS(platno, -5, 5, -5, 5)
                 gks.nacrtajOsi();
+                
+                var dt = 0.01;
+                var a = 4;
+                var b = 2;
+                var a0 = a * Math.cos(0);
+                var b0 = b * Math.sin(0);
+                gks.koristiBoju("red");
+                gks.postaviNa(a0, b0);
+                for (var t=0+dt; t<=2 * Math.PI; t+=dt){
+                    var x = a * Math.cos(t);
+                    var y = b * Math.sin(t);
+                    gks.linijaDo(x, y);
+                }
+                gks.povuciLiniju();
             }
 
-            function crtajLeptir(){
+            function crtajLeptira(){
                 var platno = document.getElementById("platnoLeptir");
                 gks = new GKS(platno, -5, 5, -5, 5)
+
+                var dt = 0.01;
+                var x0 = (Math.E ** Math.cos(0) - 2 * Math.cos(0) + Math.sin(0/12) ** 5) * Math.sin(0);
+                var y0 = (Math.E ** Math.cos(0) - 2 * Math.cos(0) + Math.sin(0/12) ** 5) * Math.cos(0);
+                gks.koristiBoju("red");
+                gks.postaviNa(x0, y0);
+                for (var t=0+dt; t<=12 * Math.PI; t+=dt){
+                    var x = (Math.E ** Math.cos(t) - 2 * Math.cos(4 * t) + Math.sin(t/12) ** 5) * Math.sin(t);
+                    var y = (Math.E ** Math.cos(t) - 2 * Math.cos(4 * t) + Math.sin(t/12) ** 5) * Math.cos(t);
+                    gks.linijaDo(x, y);
+                }
+                gks.povuciLiniju();
             }
 
             function crtajCvijet(){
                 var platno = document.getElementById("platnoCvijet");
                 gks = new GKS(platno, -5, 5, -5, 5)
+
+                var a = 5;
+                var da = 0.5;
+                var dt = 0.01;
+                gks.koristiBoju("red");
+                for (var i=a; a >= 0; a-=da){
+                    var r = i * Math.sin(0);
+                    var x0 = r * Math.cos(0);
+                    var y0 = r * Math.sin(0);
+                    gks.postaviNa(x0, y0);
+                    for (var t=0; t <= 2 * Math.PI; t+=dt){
+                        var r = a * Math.sin(4 * t)
+                        var x = r * Math.cos(t); 
+                        var y = r * Math.sin(t);
+                        gks.linijaDo(x, y);
+                    }
+                    gks.povuciLiniju();
+                }
             }
 
             function crtaj(){
                 crtajSinusoidu();
-                //crtajElipsu();
-                //crtajLeptir();
-                //crtajCvijet();
+                crtajElipsu();
+                crtajLeptira();
+                crtajCvijet();
             }
 		</script>
 	</head>
