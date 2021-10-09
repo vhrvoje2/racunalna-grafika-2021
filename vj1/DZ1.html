@@ -1,0 +1,185 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Zadaća 1</title>
+        <style>
+            h1 {
+                text-transform: uppercase;
+                font-family: Verdana, Tahoma, sans-serif;
+            }
+
+            body{
+                margin: 0;
+                padding: 0;
+                background-color: rgba(45, 225, 225, 0.2);
+            }
+
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            
+            canvas {
+                border: 3px solid black;
+                border-radius: 10px;
+                background-color: white;
+            }*/
+        </style>
+		<script>
+			class GKS {
+                constructor(platno, xmin, xmax, ymin, ymax){
+                    this.platno = platno;
+                    this.xmin = xmin;
+                    this.xmax = xmax;
+                    this.ymin = ymin;
+                    this.ymax = ymax;
+                    this.w = platno.width;
+                    this.h = platno.height;
+                    this.g = platno.getContext("2d");
+                    this.izracunajFaktorSkaliranja();
+                    this.izracunajPomake();
+                }
+                
+                izracunajFaktorSkaliranja(){
+                    this.sx = this.w / (this.xmax - this.xmin);
+				    this.sy = -this.h / (this.ymax - this.ymin);
+                    log(`Faktori skaliranja: sx=${this.sx}, sy=${this.sy}`);
+                }
+                
+                izracunajPomake(){
+                    this.px = -this.sx * this.xmin;
+                    this.py = -this.sy * this.ymax;
+                    log(`Pomaci: px=${this.px}, py=${this.py}`);
+                }
+                
+                transformirajKoordinate(x, y){
+                    var gkx = this.sx * x + this.px;
+                    var gky = this.sy * y + this.py;
+                    log(`Transformirane koordinate [${x}]->[${gkx}], [${y}]->[${gky}]`);
+                    return [gkx, gky];
+                }
+
+                postaviNa(x, y){
+                    var [gkx, gky] = this.transformirajKoordinate(x, y);
+                    this.g.beginPath();
+                    this.g.moveTo(gkx, gky);
+                    log(`Olovka postavljena na (${gkx}, ${gky})`);
+                }
+
+                linijaDo(x, y){
+                    var [gkx, gky] = this.transformirajKoordinate(x, y);
+                    this.g.lineTo(gkx, gky);
+                }
+
+                koristiBoju(c){
+                    this.g.strokeStyle = c;
+                    log(`Boja linije postavljena na ${c}!`);
+                }
+
+                povuciLiniju(){
+                    this.g.stroke();
+                    log("Linija povučena!");
+                }
+
+                nacrtajOsi(){
+                    gks.koristiBoju("black");
+                    this.nacrtajXOs();
+                    this.nacrtajYOs();
+                }
+                
+                nacrtajXOs(){
+                    this.postaviNa(0, this.py);
+                    this.linijaDo(this.w, this.py);
+                    this.povuciLiniju();
+                }
+
+                nacrtajYOs(){
+                    this.postaviNa(this.px, 0);
+                    this.linijaDo(this.px, this.h);
+                    this.povuciLiniju();
+                }
+            }
+
+            function log(message){
+                console.log(message);
+            }
+
+            function crtajSinusoidu(){
+                var platno = document.getElementById("platnoSin");
+                gks = new GKS(platno, -1, 7, -1.5, 1.5);
+                gks.nacrtajOsi();
+
+                //gks.koristiBoju("red");
+				//for (var x=gks.xmin; x<=gks.xmax; x+=0.1){
+				//	for (var y=gks.ymin; y<=gks.ymax; y+=0.1){
+			    //		let y_ = Math.sin(x);
+				//		gks.linijaDo(x, y_);
+				//	}
+				//}
+                //gks.povuciLiniju();
+            }
+
+            function crtajElipsu(){
+                var platno = document.getElementById("platnoElipsa");
+                gks = new GKS(platno, -5, 5, -5, 5)
+                gks.nacrtajOsi();
+            }
+
+            function crtajLeptir(){
+                var platno = document.getElementById("platnoLeptir");
+                gks = new GKS(platno, -5, 5, -5, 5)
+            }
+
+            function crtajCvijet(){
+                var platno = document.getElementById("platnoCvijet");
+                gks = new GKS(platno, -5, 5, -5, 5)
+            }
+
+            function crtaj(){
+                crtajSinusoidu();
+                //crtajElipsu();
+                //crtajLeptir();
+                //crtajCvijet();
+            }
+		</script>
+	</head>
+
+	<body onload=crtaj()>
+        <div>
+            <h1>Zadaća 1</h1>
+        </div>	
+
+        <div>
+            <canvas id="platnoSin" width="500" height="500">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+            <h4>Slika 1. Sinusoida</h4>
+		</div>
+
+        <div>
+            <canvas id="platnoElipsa" width="500" height="500">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+            <h4>Slika 2. Elipsa</h4>
+		</div>
+
+        <div>
+            <canvas id="platnoLeptir" width="500" height="500">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+            <h4>Slika 3. Leptir</h4>
+		</div>
+
+        <div>
+            <canvas id="platnoCvijet" width="500" height="500">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+            <h4>Slika 4. Cvijet</h4>
+		</div>
+
+	</body>
+</html>
