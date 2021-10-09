@@ -85,20 +85,20 @@
                 }
 
                 nacrtajOsi(){
-                    gks.koristiBoju("black");
+                    this.koristiBoju("black");
                     this.nacrtajXOs();
                     this.nacrtajYOs();
                 }
                 
                 nacrtajXOs(){
-                    this.postaviNa(0, this.py);
-                    this.linijaDo(this.w, this.py);
+                    this.postaviNa(this.xmin, 0);
+                    this.linijaDo(this.xmax, 0);
                     this.povuciLiniju();
                 }
 
                 nacrtajYOs(){
-                    this.postaviNa(this.px, 0);
-                    this.linijaDo(this.px, this.h);
+                    this.postaviNa(0, this.ymin);
+                    this.linijaDo(0, this.ymax);
                     this.povuciLiniju();
                 }
             }
@@ -112,14 +112,13 @@
                 gks = new GKS(platno, -1, 7, -1.5, 1.5);
                 gks.nacrtajOsi();
 
-                //gks.koristiBoju("red");
-				//for (var x=gks.xmin; x<=gks.xmax; x+=0.1){
-				//	for (var y=gks.ymin; y<=gks.ymax; y+=0.1){
-			    //		let y_ = Math.sin(x);
-				//		gks.linijaDo(x, y_);
-				//	}
-				//}
-                //gks.povuciLiniju();
+                gks.koristiBoju("red");
+                gks.postaviNa(0, Math.sin(0));
+				for (var x=0; x<=2 * Math.PI; x+=0.01){
+                    let y = Math.sin(x);
+                    gks.linijaDo(x, y);
+				}
+                gks.povuciLiniju();
             }
 
             function crtajElipsu(){
