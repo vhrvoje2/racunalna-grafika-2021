@@ -40,6 +40,7 @@
                     this.w = platno.width;
                     this.h = platno.height;
                     this.g = platno.getContext("2d");
+                    this.g.font = "10px serif";
                     this.izracunajFaktorSkaliranja();
                     this.izracunajPomake();
                 }
@@ -71,6 +72,11 @@
                     this.g.lineTo(gkx, gky);
                 }
 
+                umetniTekst(x, y, tekst){
+                    var [gkx, gky] = this.transformirajKoordinate(x, y);
+                    this.g.strokeText(tekst, gkx, gky);
+                }
+
                 koristiBoju(c){
                     this.g.strokeStyle = c;
                 }
@@ -83,6 +89,8 @@
                     this.koristiBoju("black");
                     this.nacrtajXOs();
                     this.nacrtajYOs();
+                    this.dodajXOznake();
+                    this.dodajYOznake();
                 }
                 
                 nacrtajXOs(){
@@ -95,6 +103,26 @@
                     this.postaviNa(0, this.ymin);
                     this.linijaDo(0, this.ymax);
                     this.povuciLiniju();
+                }
+
+                dodajXOznake(){
+                    var dx = 1;
+                    for (var x=this.xmin; x<=this.xmax; x+=dx){
+                        this.postaviNa(x, 0.05);
+                        this.linijaDo(x, -0.05);
+                        this.povuciLiniju();
+                        this.umetniTekst(x + 0.1, -0.1, x.toString());
+                    }
+                }
+               
+                dodajYOznake(){
+                    var dy = 1;
+                    for (var y=this.ymin; y<=this.ymax; y+=dy){
+                        this.postaviNa(0.05, y);
+                        this.linijaDo(-0.05, y);
+                        this.povuciLiniju();
+                        this.umetniTekst(0.1, y - 0.1, y.toString());
+                    }
                 }
             }
 
