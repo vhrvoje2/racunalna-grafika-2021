@@ -108,20 +108,24 @@
                 dodajXOznake(){
                     var dx = 1;
                     for (var x=this.xmin; x<=this.xmax; x+=dx){
-                        this.postaviNa(x, 0.05);
-                        this.linijaDo(x, -0.05);
+                        var floorX = Math.floor(x);
+                        this.postaviNa(floorX, 0.05);
+                        this.linijaDo(floorX, -0.05);
                         this.povuciLiniju();
-                        this.umetniTekst(x + 0.1, -0.1, x.toString());
+                        this.umetniTekst(floorX + 0.1, -0.1, floorX.toString());
                     }
                 }
                
                 dodajYOznake(){
                     var dy = 1;
                     for (var y=this.ymin; y<=this.ymax; y+=dy){
-                        this.postaviNa(0.05, y);
-                        this.linijaDo(-0.05, y);
+                        var floorY = Math.floor(y);
+                        this.postaviNa(0.05, floorY);
+                        this.linijaDo(-0.05, floorY);
                         this.povuciLiniju();
-                        this.umetniTekst(0.1, y - 0.1, y.toString());
+                        if (floorY){
+                            this.umetniTekst(0.1, floorY - 0.1, floorY.toString());
+                        }
                     }
                 }
             }
