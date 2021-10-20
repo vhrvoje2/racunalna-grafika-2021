@@ -61,8 +61,40 @@
                 gks.linijaDo(10, 3 * 10+6);
                 gks.povuciLiniju();
             }
+            
+            function crtajLeptira(){
+                var dt = 0.01;
+                var x0 = (Math.E ** Math.cos(0) - 2 * Math.cos(0) + Math.sin(0/12) ** 5) * Math.sin(0);
+                var y0 = (Math.E ** Math.cos(0) - 2 * Math.cos(0) + Math.sin(0/12) ** 5) * Math.cos(0);
+                gks.postaviNa(x0, y0);
+                for (var t=0+dt; t<9 * Math.PI; t+=dt){
+                    var x = (Math.E ** Math.cos(t) - 2 * Math.cos(4 * t) + Math.sin(t/12) ** 5) * Math.sin(t);
+                    var y = (Math.E ** Math.cos(t) - 2 * Math.cos(4 * t) + Math.sin(t/12) ** 5) * Math.cos(t);
+                    gks.linijaDo(x, y);
+                }
+                gks.povuciLiniju();
+            }
 
-            function crtaj(){
+            function crtajCvijet(){
+                var a = 3;
+                var da = 0.5;
+                var dt = 0.01;
+                for (var i=a; a >= 0; a-=da){
+                    var r = i * Math.sin(0);
+                    var x0 = r * Math.cos(0);
+                    var y0 = r * Math.sin(0);
+                    gks.postaviNa(x0, y0);
+                    for (var t=0; t <= 2 * Math.PI; t+=dt){
+                        var r = a * Math.sin(4 * t)
+                        var x = r * Math.cos(t); 
+                        var y = r * Math.sin(t);
+                        gks.linijaDo(x, y);
+                    }
+                    gks.povuciLiniju();
+                }
+            }
+
+            function lokomotiva(){
                 var platno = document.getElementById("platno");
                 gks = new GKS(platno, -10, 10, -3, 10);
                 mt2d = new MT2D();
@@ -119,6 +151,77 @@
                 gks.trans(mt2d);
                 elipsa(gks, 0.5, 0.5);
             }
+
+            function leptiri_cvjetovi(){
+                var platno = document.getElementById("platno2");
+                gks = new GKS(platno, -20, 20, -20, 20);
+                mt2d = new MT2D();
+
+                gks.koristiBoju("red");
+                mt2d.rotiraj(0.5);
+                mt2d.pomakni(12, 0);
+                gks.trans(mt2d);
+                crtajLeptira();
+
+                mt2d.identitet();
+                mt2d.rotiraj(0.5);
+                mt2d.pomakni(12, 0);
+                mt2d.zrcaliNaY();
+                gks.trans(mt2d);
+                crtajLeptira();
+
+                gks.koristiBoju("black");
+                mt2d.identitet();
+                mt2d.rotiraj(4);
+                mt2d.smicanje(-0.5, -0.5);
+                mt2d.pomakni(8, -8);
+                gks.trans(mt2d);
+                crtajLeptira();
+
+                mt2d.identitet();
+                mt2d.rotiraj(4);
+                mt2d.smicanje(-0.5, -0.5);
+                mt2d.pomakni(8, -8);
+                mt2d.zrcaliNaY();
+                gks.trans(mt2d);
+                crtajLeptira();
+
+                gks.koristiBoju("blue");
+                mt2d.identitet();
+                mt2d.pomakni(0, -13);
+                gks.trans(mt2d);
+                crtajCvijet();
+                mt2d.identitet();
+                gks.trans(mt2d);
+                gks.linijaDo(0, 0);
+                gks.povuciLiniju();
+
+                mt2d.identitet();
+                mt2d.rotiraj(3);
+                mt2d.pomakni(8, 10);
+                gks.trans(mt2d);
+                crtajCvijet();
+                mt2d.identitet();
+                gks.trans(mt2d);
+                gks.linijaDo(0, 0);
+                gks.povuciLiniju();
+
+                mt2d.identitet();
+                mt2d.rotiraj(3);
+                mt2d.pomakni(8, 10);
+                mt2d.zrcaliNaY();
+                gks.trans(mt2d);
+                crtajCvijet();
+                mt2d.identitet();
+                gks.trans(mt2d);
+                gks.linijaDo(0, 0);
+                gks.povuciLiniju();
+            }
+
+            function crtaj(){
+                lokomotiva();
+                leptiri_cvjetovi();
+            }
 		</script>
 	</head>
 
@@ -131,8 +234,15 @@
             <canvas id="platno" width="700" height="500">
                 Vaš preglednik ne podržava HTML5 canvas.
             </canvas>
+            <h4>Slika 1. Lokomotiva</h4>
 		</div>
 
+        <div>
+            <canvas id="platno2" width="700" height="500">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+            <h4>Slika 2. Leptiri i cvjetovi</h4>
+		</div>
 	</body>
     <script src="./gks.js"></script>
     <script src="./mt2d.js"></script>

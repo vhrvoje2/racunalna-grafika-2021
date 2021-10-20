@@ -84,4 +84,19 @@ class MT2D {
 
         this._matrica = m0;
     }
+
+    rotiraj_oko_tocke(x0, y0, kut) {
+        this.pomakni(x0, y0);
+        this.rotiraj(kut);
+        this.pomakni(-x0, -y0);
+    }
+
+    zrcaliNa(k, l) {
+        var kut = Math.atan(k);
+        this.pomakni(0, -l);
+        this.rotiraj(-kut);
+        this.zrcaliNaX();
+        this.rotiraj(kut);
+        this.pomakni(0, l);
+    }
 }
