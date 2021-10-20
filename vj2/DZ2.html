@@ -1,0 +1,139 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Zadaća 2</title>
+        <style>
+            h1 {
+                text-transform: uppercase;
+                font-family: Verdana, Tahoma, sans-serif;
+            }
+
+            body{
+                margin: 0;
+                padding: 0;
+                background-color: rgba(45, 225, 225, 0.2);
+            }
+
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            
+            canvas {
+                border: 3px solid black;
+                border-radius: 10px;
+                background-color: white;
+            }
+        </style>
+		<script>
+            function pravokutnik(gks, x0, y0, x1, y1){
+                gks.postaviNa(x0, y0);
+                gks.linijaDo(x1, y0);
+                gks.linijaDo(x1, y1);
+                gks.linijaDo(x0, y1);
+                gks.linijaDo(x0, y0);
+                gks.povuciLiniju();
+            }
+
+            function elipsa(gks, a, b){
+                var dt = 0.01;
+                gks.postaviNa(a * Math.cos(0), b * Math.sin(0));
+				for (var t=0+dt; t<=2 * Math.PI; t+=dt){
+                    let x = a * Math.cos(t);
+                    let y = b * Math.sin(t);
+                    gks.linijaDo(x, y);
+				}
+                gks.povuciLiniju();
+            }
+
+            function vlak(gks, mt2d, x0, y0, x1, y1){
+                pravokutnik(gks, x0, y0, x1, y1);
+                pravokutnik(gks, x0 + 4, y0, x1 + 2, y1 + 1);
+                pravokutnik(gks, x0 + 4.25, y0 + 2, x1 + 1.75, y1 + 0.75);
+            }
+
+            function pravac(gks){
+                gks.postaviNa(-7, 3 * -7 + 6)
+                gks.linijaDo(10, 3 * 10+6);
+                gks.povuciLiniju();
+            }
+
+            function crtaj(){
+                var platno = document.getElementById("platno");
+                gks = new GKS(platno, -10, 10, -3, 10);
+                mt2d = new MT2D();
+                
+                gks.nacrtajOsi();
+                mt2d.pomakni(1, 2);
+                gks.trans(mt2d);
+                vlak(gks, mt2d, 0, 0, 4, 2);
+
+                mt2d.identitet();
+                mt2d.pomakni(2, 2);
+                gks.trans(mt2d);
+                elipsa(gks, 0.5, 0.5);
+
+                mt2d.identitet();
+                mt2d.pomakni(6, 2);
+                gks.trans(mt2d);
+                elipsa(gks, 0.5, 0.5);
+
+                gks.koristiBoju("red");
+                mt2d.identitet();
+                gks.trans(mt2d);
+                pravac(gks);
+
+                var kut = Math.atan(3);
+                gks.koristiBoju("blue");
+                mt2d.identitet();
+                mt2d.pomakni(1, 2);
+                mt2d.pomakni(0, -6);
+                mt2d.rotiraj(-kut);
+                mt2d.zrcaliNaX();
+                mt2d.rotiraj(kut);
+                mt2d.pomakni(0, 6);
+                gks.trans(mt2d);
+                vlak(gks, mt2d, 0, 0, 4, 2);
+
+                mt2d.identitet();
+                mt2d.pomakni(2, 2);
+                mt2d.pomakni(0, -6);
+                mt2d.rotiraj(-kut);
+                mt2d.zrcaliNaX();
+                mt2d.rotiraj(kut);
+                mt2d.pomakni(0, 6);
+                gks.trans(mt2d);
+                elipsa(gks, 0.5, 0.5);
+
+                mt2d.identitet();
+                mt2d.pomakni(6, 2);
+                mt2d.pomakni(0, -6);
+                mt2d.rotiraj(-kut);
+                mt2d.zrcaliNaX();
+                mt2d.rotiraj(kut);
+                mt2d.pomakni(0, 6);
+                gks.trans(mt2d);
+                elipsa(gks, 0.5, 0.5);
+            }
+		</script>
+	</head>
+
+	<body onload=crtaj()>
+        <div>
+            <h1>Zadaća 2</h1>
+        </div>	
+
+        <div>
+            <canvas id="platno" width="700" height="500">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+		</div>
+
+	</body>
+    <script src="./gks.js"></script>
+    <script src="./mt2d.js"></script>
+</html>
