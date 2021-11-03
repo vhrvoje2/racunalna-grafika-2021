@@ -1,0 +1,112 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Zadaća 4</title>
+        <style>
+            h1 {
+                text-transform: uppercase;
+                font-family: Verdana, Tahoma, sans-serif;
+            }
+
+            body{
+                margin: 0;
+                padding: 0;
+                background-color: rgba(45, 225, 225, 0.2);
+            }
+
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            
+            canvas {
+                border: 3px solid black;
+                border-radius: 10px;
+                background-color: white;
+            }
+        </style>
+		<script>
+            function kocka(persp, a){
+                persp.postaviNa(a, 0, 0);
+                persp.linijaDo(a, a, 0);
+                persp.linijaDo(0, a, 0);
+                persp.linijaDo(0, 0, 0);
+                persp.linijaDo(a, 0, 0);
+                persp.linijaDo(a, 0, a);
+                persp.linijaDo(a, a, a);
+                persp.linijaDo(0, a, a);
+                persp.linijaDo(0, 0, a);
+                persp.linijaDo(a, 0, a);
+                persp.povuciLiniju();
+                persp.postaviNa(a, a, a);
+                persp.linijaDo(a, a, 0);
+                persp.povuciLiniju();
+                persp.postaviNa(0, a, a);
+                persp.linijaDo(0, a, 0);
+                persp.povuciLiniju();
+                persp.postaviNa(0, 0, a);
+                persp.linijaDo(0, 0, 0);
+                persp.povuciLiniju();
+            }
+
+            function crtaj(){
+                var a = 1;
+                var platno = document.getElementById("platno");
+                persp = new Persp(platno, -100, 100, -100, 100, 20);
+                mt3d = new MT3D();
+
+                mt3d.postaviKameru(3, 7, 4, 1, 1, 4, 0, 0, 1);
+                persp.trans(mt3d);
+                kocka(persp, a);
+
+                mt3d.pomakni(0, a, 0);
+                persp.trans(mt3d);
+                kocka(persp, a);
+
+                mt3d.pomakni(0, a, 0);
+                persp.trans(mt3d);
+                kocka(persp, a);
+
+                mt3d.pomakni(0, a, 0);
+                persp.trans(mt3d);
+                kocka(persp, a);
+
+                mt3d.pomakni(0, a, 0);
+                persp.trans(mt3d);
+                kocka(persp, a);
+
+                mt3d.pomakni(a, 0, 0);
+                persp.trans(mt3d);
+                kocka(persp, a);
+                
+                mt3d.pomakni(a, 0, 0);
+                persp.trans(mt3d);
+                kocka(persp, a);
+
+                mt3d.identitet();
+                mt3d.pomakni(a, 2 * a, 0);
+                persp.trans(mt3d);
+                kocka(persp, a);
+            }
+		</script>
+	</head>
+
+	<body onload=crtaj()>
+        <div>
+            <h1>Zadaća 4</h1>
+        </div>	
+
+        <div>
+            <canvas id="platno" width="700" height="700">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+            <h4>Slika 1. slovo F u perspektivnoj projekciji</h4>
+		</div>
+	</body>
+    <script src="./persp.js"></script>
+    <script src="./mt3d.js"></script>
+</html>
