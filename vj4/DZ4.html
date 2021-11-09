@@ -30,36 +30,13 @@
             }
         </style>
 		<script>
-            function kocka(persp, a){
-                persp.postaviNa(a, 0, 0);
-                persp.linijaDo(a, a, 0);
-                persp.linijaDo(0, a, 0);
-                persp.linijaDo(0, 0, 0);
-                persp.linijaDo(a, 0, 0);
-                persp.linijaDo(a, 0, a);
-                persp.linijaDo(a, a, a);
-                persp.linijaDo(0, a, a);
-                persp.linijaDo(0, 0, a);
-                persp.linijaDo(a, 0, a);
-                persp.povuciLiniju();
-                persp.postaviNa(a, a, a);
-                persp.linijaDo(a, a, 0);
-                persp.povuciLiniju();
-                persp.postaviNa(0, a, a);
-                persp.linijaDo(0, a, 0);
-                persp.povuciLiniju();
-                persp.postaviNa(0, 0, a);
-                persp.linijaDo(0, 0, 0);
-                persp.povuciLiniju();
-            }
-
             function crtaj(){
                 var a = 1;
                 var platno = document.getElementById("platno");
-                persp = new Persp(platno, -100, 100, -100, 100, 20);
+                persp = new Persp(platno, -10, 10, -10, 10, 3);
                 mt3d = new MT3D();
 
-                mt3d.postaviKameru(3, 7, 4, 1, 1, 4, 0, 0, 1);
+                mt3d.postaviKameru(4, 3, 4, 2, 2, 2, 3, 3, 3);
                 persp.trans(mt3d);
                 kocka(persp, a);
 
@@ -91,6 +68,56 @@
                 mt3d.pomakni(a, 2 * a, 0);
                 persp.trans(mt3d);
                 kocka(persp, a);
+
+                persp.koristiBoju("red");
+                mreza();
+
+                function kocka(){
+                    persp.postaviNa(a, 0, 0);
+                    persp.linijaDo(a, a, 0);
+                    persp.linijaDo(0, a, 0);
+                    persp.linijaDo(0, 0, 0);
+                    persp.linijaDo(a, 0, 0);
+                    persp.linijaDo(a, 0, a);
+                    persp.linijaDo(a, a, a);
+                    persp.linijaDo(0, a, a);
+                    persp.linijaDo(0, 0, a);
+                    persp.linijaDo(a, 0, a);
+                    persp.povuciLiniju();
+                    persp.postaviNa(a, a, a);
+                    persp.linijaDo(a, a, 0);
+                    persp.povuciLiniju();
+                    persp.postaviNa(0, a, a);
+                    persp.linijaDo(0, a, 0);
+                    persp.povuciLiniju();
+                    persp.postaviNa(0, 0, a);
+                    persp.linijaDo(0, 0, 0);
+                    persp.povuciLiniju();
+                }
+
+                function mreza(){
+                    persp.trans(mt3d);
+                    mrezaX();
+                    mrezaY();
+                }
+
+                function mrezaX(){
+                    var dx = 0.5;
+                    for (var x = -10; x <= 10; x += dx){
+                        persp.postaviNa(5, x, 0);
+                        persp.linijaDo(-5, x, 0);
+                        persp.povuciLiniju();
+                    }
+                }
+                
+                function mrezaY(){
+                    var dy = 0.5;
+                    for (var y = -10; y <= 10; y += dy){
+                        persp.postaviNa(y, 5, 0);
+                        persp.linijaDo(y, -5, 0);
+                        persp.povuciLiniju();
+                    }
+                }
             }
 		</script>
 	</head>

@@ -36,7 +36,7 @@ class Persp {
     }
 
     trans(m) {
-        this._matrica = m.mnoziMatrice(m._matrica, m._kamera);
+        this._matrica = m.mnoziMatrice(m._kamera, m._matrica);
     }
 
     koristiBoju(c) {
