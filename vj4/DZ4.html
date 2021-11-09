@@ -33,45 +33,77 @@
             function crtaj(){
                 var a = 1;
                 var platno = document.getElementById("platno");
-                persp = new Persp(platno, -10, 10, -10, 10, 8);
+                persp = new Persp(platno, -10, 10, -10, 10, 5);
                 mt3d = new MT3D();
+                var visina = 1;
+                var dVisina = 0.03;
+                var negativa = null;
+                // var kut = 1;
 
-                mt3d.postaviKameru(5, 4.5, 5, 2, 3, 2, 5, 5, 5);
-                persp.koristiBoju("red");
-                mreza();
-                
-                persp.koristiBoju("black");
-                persp.trans(mt3d);
-                kocka(persp, a);
+                function animiraj(){
+                    persp.ocisti();
+                    // mt3d.rotirajZ(kut);
+                    // mt3d.pomakni(0, 0, 3);
+                    persp.trans(mt3d);
 
-                mt3d.pomakni(0, a, 0);
-                persp.trans(mt3d);
-                kocka(persp, a);
+                    // if (kut < 360){
+                    //     kut = 0;
+                    // }
+                    // else {
+                    //     kut++;
+                    // }
 
-                mt3d.pomakni(0, a, 0);
-                persp.trans(mt3d);
-                kocka(persp, a);
+                    if (visina > 5){
+                        negativa = true;
+                    }
+                    else if (visina < 1){
+                        negativa = false;
+                    }
 
-                mt3d.pomakni(0, a, 0);
-                persp.trans(mt3d);
-                kocka(persp, a);
+                    negativa ? visina = visina - dVisina : visina = visina + dVisina;
 
-                mt3d.pomakni(0, a, 0);
-                persp.trans(mt3d);
-                kocka(persp, a);
+                    mt3d.postaviKameru(6, visina, 6, 2, 2, 2, 4, 4, 4);
+                    
+                    persp.koristiBoju("red");
+                    mreza();
+                    
+                    persp.koristiBoju("black");
+                    persp.trans(mt3d);
+                    kocka(persp, a);
 
-                mt3d.pomakni(a, 0, 0);
-                persp.trans(mt3d);
-                kocka(persp, a);
-                
-                mt3d.pomakni(a, 0, 0);
-                persp.trans(mt3d);
-                kocka(persp, a);
+                    mt3d.pomakni(0, a, 0);
+                    persp.trans(mt3d);
+                    kocka(persp, a);
 
-                mt3d.identitet();
-                mt3d.pomakni(a, 2 * a, 0);
-                persp.trans(mt3d);
-                kocka(persp, a);
+                    mt3d.pomakni(0, a, 0);
+                    persp.trans(mt3d);
+                    kocka(persp, a);
+
+                    mt3d.pomakni(0, a, 0);
+                    persp.trans(mt3d);
+                    kocka(persp, a);
+
+                    mt3d.pomakni(0, a, 0);
+                    persp.trans(mt3d);
+                    kocka(persp, a);
+
+                    mt3d.pomakni(a, 0, 0);
+                    persp.trans(mt3d);
+                    kocka(persp, a);
+                    
+                    mt3d.pomakni(a, 0, 0);
+                    persp.trans(mt3d);
+                    kocka(persp, a);
+
+                    mt3d.identitet();
+                    mt3d.pomakni(a, 2 * a, 0);
+                    persp.trans(mt3d);
+                    kocka(persp, a);
+
+                    requestAnimationFrame(animiraj);
+                }
+
+                animiraj();
 
                 function kocka(){
                     persp.postaviNa(a, 0, 0);
