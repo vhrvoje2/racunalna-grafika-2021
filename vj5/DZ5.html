@@ -1,0 +1,147 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>Zadaća 5</title>
+        <style>
+            h1 {
+                text-transform: uppercase;
+                font-family: Verdana, Tahoma, sans-serif;
+            }
+
+            body{
+                margin: 0;
+                padding: 0;
+                background-color: rgba(45, 225, 225, 0.2);
+            }
+
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            
+            canvas {
+                border: 3px solid black;
+                border-radius: 10px;
+                background-color: white;
+            }
+        </style>
+		<script>
+            function crtaj(){
+                var platno = document.getElementById("platno");
+                persp = new Persp(platno, -10, 10, -10, 10, 3);
+                mt3d = new MT3D();
+                var alfa = 0;
+                var dAlfa = 0.5;
+
+                function animiraj(){
+                    persp.ocisti();
+                    mt3d.identitet();
+                    persp.trans(mt3d);
+                    mt3d.postaviKameru(6, 5, 6, 1, 1, 1, 4, 4, 4);
+                    persp.trans(mt3d);
+                    
+                    persp.koristiBoju("red");
+                    mreza();
+                    persp.koristiBoju("black");
+
+                    mt3d.identitet();
+                    persp.trans(mt3d);
+                    persp.stozac(3, 6, 15);
+                    
+                    mt3d.identitet();
+                    mt3d.rotirajY(mt3d.kutRadijani(alfa));
+                    mt3d.pomakni(0, 4.4, 0);
+                    persp.trans(mt3d);
+                    persp.valjak(0.8, 1.5, 10);
+                    
+                    mt3d.identitet();
+                    mt3d.rotirajZ(mt3d.kutRadijani(90));
+                    mt3d.rotirajY(mt3d.kutRadijani(alfa + 120));
+                    mt3d.pomakni(0, 5, 0);
+                    persp.trans(mt3d);
+                    persp.valjak(0.3, 5, 10);
+                    
+                    mt3d.identitet();
+                    mt3d.rotirajZ(mt3d.kutRadijani(90));
+                    mt3d.rotirajY(mt3d.kutRadijani(alfa + 240));
+                    mt3d.pomakni(0, 5, 0);
+                    persp.trans(mt3d);
+                    persp.valjak(0.3, 5, 10);
+                    
+                    mt3d.identitet();
+                    mt3d.rotirajZ(mt3d.kutRadijani(90));
+                    mt3d.rotirajY(mt3d.kutRadijani(alfa + 360));
+                    mt3d.pomakni(0, 5, 0);
+                    persp.trans(mt3d);
+                    persp.valjak(0.3, 5, 10);
+
+                    mt3d.identitet();
+                    mt3d.pomakni(3, 5, -5);
+                    mt3d.rotirajY(mt3d.kutRadijani(alfa));
+                    persp.trans(mt3d);
+                    persp.polukugla(1, 10, 10);
+                    
+                    mt3d.identitet();
+                    mt3d.pomakni(3, 5, -5);
+                    mt3d.rotirajY(mt3d.kutRadijani(alfa + 120));
+                    persp.trans(mt3d);
+                    persp.polukugla(1.5, 10, 10);
+                    
+                    mt3d.identitet();
+                    mt3d.pomakni(3, 5, -5);
+                    mt3d.rotirajY(mt3d.kutRadijani(alfa + 240));
+                    persp.trans(mt3d);
+                    persp.polukugla(1.5, 10, 10);
+
+                    alfa > 360 ? alfa = 0 : alfa += dAlfa;
+
+                    requestAnimationFrame(animiraj);
+                }
+
+                animiraj();
+
+                function mreza(){
+                    mt3d.identitet();
+                    persp.trans(mt3d);
+                    mrezaX();
+                    mrezaZ();
+                }
+    
+                function mrezaX(){
+                    for (var x = -5; x <= 5; x++){
+                        persp.postaviNa(x, 0, -5);
+                        persp.linijaDo(x, 0, 5);
+                        persp.povuciLiniju();
+                    }
+                }
+                
+                function mrezaZ(){
+                    for (var z = -5; z <= 5; z++){
+                        persp.postaviNa(-5, 0, z);
+                        persp.linijaDo(5, 0, z);
+                        persp.povuciLiniju();
+                    }
+                }
+            }
+		</script>
+	</head>
+
+	<body onload=crtaj()>
+        <div>
+            <h1>Zadaća 5</h1>
+        </div>	
+
+        <div>
+            <canvas id="platno" width="700" height="700">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+            <h4>Slika 1. Vjetromjer</h4>
+		</div>
+	</body>
+    <script src="./persp.js"></script>
+    <script src="./mt3d.js"></script>
+</html>
