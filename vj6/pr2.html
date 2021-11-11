@@ -1,0 +1,131 @@
+
+<!doctype html>
+<html lang="hr">
+	<head>
+		<meta charset="UTF-8">
+		<title>WebGL2 - Primjena uniform varijable</title>
+        <style>
+            h1 {
+                text-transform: uppercase;
+                font-family: Verdana, Tahoma, sans-serif;
+            }
+
+            body{
+                margin: 0;
+                padding: 0;
+                background-color: rgba(45, 225, 225, 0.2);
+            }
+
+            div {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+            
+            canvas {
+                border: 3px solid black;
+                border-radius: 10px;
+                background-color: white;
+            }
+        </style>
+		<script>
+            function crtaj(){
+                var platno1 = document.getElementById("platno");
+                gl = platno1.getContext("webgl2");
+                if (!gl) alert("WebGL2 nije dostupan!");
+
+                GPUprogram1 = pripremiGPUprogram(gl, "vertex-shader", "fragment-shader");
+                gl.useProgram(GPUprogram1); // možemo imati više GPU programa
+
+                // povezivanje s uniform varijablama u programima za sjenčanje
+                GPUprogram1.u_mTrans = gl.getUniformLocation(GPUprogram1, "u_mTrans");
+                GPUprogram1.u_boja = gl.getUniformLocation(GPUprogram1, "u_boja");
+
+                // definiranje geometrije preko javascript polja
+                var vrhovi = [ 0.0,  0.0];
+                var a = 0.9;
+                var b = 0.3;
+
+                for (var i = 0; i < 2 * Math.PI; i += 0.001){
+                    var x = Math.cos(i) * a;
+                    var y = Math.sin(i) * b;
+                    vrhovi.push(x);
+                    vrhovi.push(y);
+                }
+                
+                function napuniSpremnike() {
+                    spremnikVrhova = gl.createBuffer();
+                    gl.bindBuffer(gl.ARRAY_BUFFER, spremnikVrhova);
+                    
+                    // povezivanje s atribut varijablom a_vrhXY u programu za sjenčanje
+                    GPUprogram1.a_vrhXY = gl.getAttribLocation(GPUprogram1, "a_vrhXY");
+                    gl.enableVertexAttribArray(GPUprogram1.a_vrhXY);
+                    gl.vertexAttribPointer(GPUprogram1.a_vrhXY, 2, gl.FLOAT, false, 0, 0);
+                    // punjenje spremnika - podaci koji se šalju na GPU
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vrhovi), gl.STATIC_DRAW);
+                } // napuniSpremnike
+
+                function iscrtaj() {
+                    gl.clearColor(0.4, 0.4, 0.4, 1);
+                    gl.clear(gl.COLOR_BUFFER_BIT);
+                    gl.viewport(0, 0, platno1.width, platno1.height);
+
+                    // postavljanje vrijednosti uniform varijabli
+                    gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
+                        [1.0, 0.0, 0.0, 1.0]); // jedinična matrica
+                    gl.uniform4fv(GPUprogram1.u_boja, [0.0, 1.0, 0.0, 1.0]); // zelena boja
+                    gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
+                    
+                    let kut = Math.PI / 3;
+                    gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
+                        [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
+                    gl.uniform4fv(GPUprogram1.u_boja, [1.0, 1.0, 0.0, 1.0]); // žuta boja
+                    gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
+
+                    kut = Math.PI / 1.5;
+                    gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
+                        [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
+                    gl.uniform4fv(GPUprogram1.u_boja, [1.0, 0.0, 0.0, 1.0]); // crvena boja
+                    gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
+                } // iscrtaj
+
+                napuniSpremnike();
+                iscrtaj();
+            } // WebGLaplikacija
+		</script>
+        
+		<script id="vertex-shader" type="x-shader/x-vertex">
+            #version 300 es
+            in vec2 a_vrhXY;
+            uniform mat2 u_mTrans;
+
+            void main() {
+                gl_Position = vec4(u_mTrans * a_vrhXY, 0, 1); // primijeni matricu transformacije
+            }
+          </script>
+      
+          <script id="fragment-shader" type="x-shader/x-fragment">
+            #version 300 es
+            precision mediump float;
+            uniform vec4 u_boja;
+            out vec4 bojaPiksela;
+        
+            void main() {
+              bojaPiksela = u_boja; // boja se postavlja preko uniform varijable u_boja
+            }
+          </script>
+	</head>
+
+	<body onload=crtaj()>
+        <div>
+            <h1>WebGL2 - Primjena <code>uniform</code> varijabli</code></h1>
+        </div>	
+        <div>
+            <canvas id="platno" width="700" height="700">
+                Vaš preglednik ne podržava HTML5 canvas.
+            </canvas>
+		</div>
+	</body>
+    <script src="./RG-WebGL.js"></script>
+</html>
