@@ -99,4 +99,29 @@ class MT2D {
         this.rotiraj(kut);
         this.pomakni(0, l);
     }
+
+    lista() {
+        var listaOut = [];
+
+        for (var i = 0; i < 3; i++) {
+            for (var j = 0; j < 3; j++) {
+                listaOut.push(this._matrica[j][i]);
+            }
+        }
+
+        return listaOut;
+    }
+
+    projekcija2D(xmin, xmax, ymin, ymax) {
+        var sx = 2 / (xmax - xmin);
+        var tx = (xmin + xmax) / (xmin - xmax);
+        var sy = 2 / (ymax - ymin);
+        var ty = (ymin + ymax) / (ymin - ymax);
+
+        var m =
+            [[sx, 0, tx],
+            [0, sy, ty],
+            [0, 0, 1]];
+        this.mult(m);
+    }
 }

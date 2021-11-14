@@ -70,22 +70,24 @@
                     gl.clearColor(0.4, 0.4, 0.4, 1);
                     gl.clear(gl.COLOR_BUFFER_BIT);
                     gl.viewport(0, 0, platno1.width, platno1.height);
-
+                    
+                    var dx = 0.9;
+                    var dy = 0.3;
                     // postavljanje vrijednosti uniform varijabli
-                    gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
-                        [1.0, 0.0, 0.0, 1.0]); // jedinična matrica
+                    gl.uniformMatrix3fv(GPUprogram1.u_mTrans, false,
+                        [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]); // jedinična matrica
                     gl.uniform4fv(GPUprogram1.u_boja, [0.0, 1.0, 0.0, 1.0]); // zelena boja
                     gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
                     
                     let kut = Math.PI / 3;
-                    gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
-                        [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
+                    gl.uniformMatrix3fv(GPUprogram1.u_mTrans, false,
+                        [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, dx, dy, 1.0]);
                     gl.uniform4fv(GPUprogram1.u_boja, [1.0, 1.0, 0.0, 1.0]); // žuta boja
                     gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
 
                     kut = Math.PI / 1.5;
-                    gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
-                        [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
+                    gl.uniformMatrix3fv(GPUprogram1.u_mTrans, false,
+                        [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, -dx, -dy, 1.0]);
                     gl.uniform4fv(GPUprogram1.u_boja, [1.0, 0.0, 0.0, 1.0]); // crvena boja
                     gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
                 } // iscrtaj
@@ -98,10 +100,10 @@
 		<script id="vertex-shader" type="x-shader/x-vertex">
             #version 300 es
             in vec2 a_vrhXY;
-            uniform mat2 u_mTrans;
+            uniform mat3 u_mTrans;
 
             void main() {
-                gl_Position = vec4(u_mTrans * a_vrhXY, 0, 1); // primijeni matricu transformacije
+                gl_Position = vec4(u_mTrans * vec3(a_vrhXY, 1), 1); // primijeni matricu transformacije
             }
           </script>
       
@@ -128,4 +130,5 @@
 		</div>
 	</body>
     <script src="./RG-WebGL.js"></script>
+    <script src="./mt2d.js"></script>
 </html>
