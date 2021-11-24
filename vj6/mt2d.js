@@ -49,8 +49,9 @@ class MT2D {
     }
 
     rotiraj(kut) {
-        let sinKut = Math.sin(kut);
-        let cosKut = Math.cos(kut);
+        let rot = kut * (Math.PI / 180);
+        let sinKut = Math.sin(rot);
+        let cosKut = Math.cos(rot);
         var m =
             [[cosKut, -sinKut, 0],
             [sinKut, cosKut, 0],
@@ -113,15 +114,17 @@ class MT2D {
     }
 
     projekcija2D(xmin, xmax, ymin, ymax) {
-        var sx = 2 / (xmax - xmin);
-        var tx = (xmin + xmax) / (xmin - xmax);
-        var sy = 2 / (ymax - ymin);
-        var ty = (ymin + ymax) / (ymin - ymax);
+        this.px = 2 / (xmax - xmin);
+        this.py = 2 / (ymax - ymin);
+        this.sx = -this.px * xmin - 1;
+        this.sy = -this.py * ymin - 1;
+    }
 
-        var m =
-            [[sx, 0, tx],
-            [0, sy, ty],
-            [0, 0, 1]];
-        this.mult(m);
+    normirajX(x) {
+        return this.px * x + this.sx;
+    }
+
+    normirajY(y) {
+        return this.py * y + this.sy;
     }
 }

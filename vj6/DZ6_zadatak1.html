@@ -56,30 +56,51 @@
                 var b1 = 3;
                 var a2 = 4;
                 var b2 = 1;
-                var w = platno1.width;
-                var h = platno1.height;
+
                 var mt2d = new MT2D();
+                mt2d.projekcija2D(-10, 10, -10, 10);
                 mt2d.rotiraj(-30);
-                mt2d.projekcija2D(0, w, 0, h);
-                mt2d.pomakni(4, 0);
-                mt2d.projekcija2D(0, w, 0, h);
-                var vrhovi = elipsa(mt2d, a1, b1);
-                
+                var x0 = mt2d.normirajX(4);
+                var y0 = mt2d.normirajY(0);
+                mt2d.pomakni(x0, y0);
+                vrhovi = elipsa(mt2d, a1, b1);
+                napuniSpremnike();
+                iscrtaj(1.0, 0.0, 0.0);
+
+                mt2d.identitet();
+                var x0 = mt2d.normirajX(4);
+                var y0 = mt2d.normirajY(0);
+                mt2d.pomakni(x0, y0);
+                mt2d.rotiraj(-30);
+                vrhovi = elipsa(mt2d, a1, b1);
+                napuniSpremnike();
+                iscrtaj(0.0, 0.0, 1.0);
+
+                mt2d.identitet();
+                var x0 = mt2d.normirajX(1);
+                var y0 = mt2d.normirajY(-3);
+                mt2d.pomakni(x0, y0);
+                mt2d.rotiraj(75);
+                mt2d.zrcaliNaY();
+                vrhovi = elipsa(mt2d, a2, b2);
+                napuniSpremnike();
+                iscrtaj(0.0, 1.0, 0.0);
+
                 function elipsa(mt2d, a, b){
                     var dt = 0.01;
-                    mt2d.pomakni(0, 0);
-                    var vrhovi = mt2d.lista();
+                    var vrhovi = [];
                     for (var t=0; t<=2 * Math.PI; t+=dt){
                         let x = a * Math.cos(t);
                         let y = b * Math.sin(t);
-                        mt2d.pomakni(x, y);
-                        mt2d.projekcija2D(0, w, 0, h);
-                        vrhovi.push(mt2d.lista());
+                        let x1 = mt2d.normirajX(x);
+                        let y1 = mt2d.normirajY(y);
+                        vrhovi.push(x1);
+                        vrhovi.push(y1);
                     }
-                    return vrhovi.flat();
+                    return vrhovi;
                 }
 
-                function napuniSpremnike(vrhovi) {
+                function napuniSpremnike() {
                     spremnikVrhova = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, spremnikVrhova);
                     
@@ -91,32 +112,13 @@
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vrhovi), gl.STATIC_DRAW);
                 } // napuniSpremnike
 
-                function iscrtaj(vrhovi) {
-                    gl.clearColor(0.4, 0.4, 0.4, 1);
-                    gl.clear(gl.COLOR_BUFFER_BIT);
-                    gl.viewport(0, 0, w, h);
-
+                function iscrtaj(r, g, b) {
                     // postavljanje vrijednosti uniform varijabli
                     gl.uniformMatrix3fv(GPUprogram1.u_mTrans, false,
-                        [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]); // jedinična matrica
-                    gl.uniform4fv(GPUprogram1.u_boja, [0.0, 1.0, 0.0, 1.0]); // zelena boja
+                        mt2d.lista()); // jedinična matrica
+                    gl.uniform4fv(GPUprogram1.u_boja, [r, g, b, 1.0]); // zelena boja
                     gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
-                    
-                    // let kut = Math.PI / 3;
-                    // gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
-                    //     [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
-                    // gl.uniform4fv(GPUprogram1.u_boja, [1.0, 1.0, 0.0, 1.0]); // žuta boja
-                    // gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
-
-                    // kut = Math.PI / 1.5;
-                    // gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
-                    //     [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
-                    // gl.uniform4fv(GPUprogram1.u_boja, [1.0, 0.0, 0.0, 1.0]); // crvena boja
-                    // gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
                 } // iscrtaj
-
-                napuniSpremnike();
-                iscrtaj();
             } // WebGLaplikacija
 		</script>
         
