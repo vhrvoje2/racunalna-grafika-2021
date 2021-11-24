@@ -31,6 +31,16 @@
         </style>
 		<script>
             function crtaj(){
+                /*Zadatak 1
+                U klasu MT2D dodajte jos i metodu projekcija2D(xmin, xmax, ymin, ymax) koja preslikava
+                koordinate iz zadanog raspona u normirane koordinate izmedu −1 i 1. Rijesite zadatak 2.4.
+                (laboratorijske vjezbe 2) iscrtavanjem ispunjenih (obojanih) elipsi.
+
+                2.4. U klasu MT2D dodajte mogućnost kompozicije geometrijskih transformacija (tj. množenja odgovarajućih matrica transformacija) 
+                preko metode mult(m) pri čemu matrica m (objekt klase MT2D) množi s desna. Kombiniranjem odgovarajućih geometrijskih transformacija nacrtajte sljedeće elipse:
+                Poluosi a = 6, b = 3, velika os elipse je pod kutem od -30° prema osi x, a središte je u točki (4, 0) (nacrtajte crvenom bojom);
+                Isto kao i gore, ali promijenite poredak transformacija: prvo pomaknite, pa rotirajte (nacrtajte plavom bojom);
+                Poluosi a = 4, b = 1, elipsa je najprije zarotirana za 75°, potom pomaknuta za 3 u desno, te zrcaljena na osi y (zelena boja).*/
                 var platno1 = document.getElementById("platno");
                 gl = platno1.getContext("webgl2");
                 if (!gl) alert("WebGL2 nije dostupan!");
@@ -41,25 +51,34 @@
                 // povezivanje s uniform varijablama u programima za sjenčanje
                 GPUprogram1.u_mTrans = gl.getUniformLocation(GPUprogram1, "u_mTrans");
                 GPUprogram1.u_boja = gl.getUniformLocation(GPUprogram1, "u_boja");
+
+                var a1 = 6;
+                var b1 = 3;
+                var a2 = 4;
+                var b2 = 1;
+                var w = platno1.width;
+                var h = platno1.height;
+                var mt2d = new MT2D();
+                mt2d.rotiraj(-30);
+                mt2d.projekcija2D(0, w, 0, h);
+                mt2d.pomakni(4, 0);
+                mt2d.projekcija2D(0, w, 0, h);
+                var vrhovi = elipsa(mt2d, a1, b1);
                 
-                var a = 0.4;
-                var b = 0.1;
-                var krugVrhovi = generirajElipsu(b, b);
-                var elipsaVrhovi = generirajElipsu(a, b);
-
-                function generirajElipsu(a, b){
-                    var vrhovi = [0.0,  0.0];
-
-                    for (var i = 0; i < 2 * Math.PI; i += 0.001){
-                        var x = Math.cos(i) * a;
-                        var y = Math.sin(i) * b;
-                        vrhovi.push(x);
-                        vrhovi.push(y);
+                function elipsa(mt2d, a, b){
+                    var dt = 0.01;
+                    mt2d.pomakni(0, 0);
+                    var vrhovi = mt2d.lista();
+                    for (var t=0; t<=2 * Math.PI; t+=dt){
+                        let x = a * Math.cos(t);
+                        let y = b * Math.sin(t);
+                        mt2d.pomakni(x, y);
+                        mt2d.projekcija2D(0, w, 0, h);
+                        vrhovi.push(mt2d.lista());
                     }
-
-                    return vrhovi;
+                    return vrhovi.flat();
                 }
-                
+
                 function napuniSpremnike(vrhovi) {
                     spremnikVrhova = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, spremnikVrhova);
@@ -72,45 +91,32 @@
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vrhovi), gl.STATIC_DRAW);
                 } // napuniSpremnike
 
-                function iscrtajKrug() {
+                function iscrtaj(vrhovi) {
                     gl.clearColor(0.4, 0.4, 0.4, 1);
                     gl.clear(gl.COLOR_BUFFER_BIT);
-                    gl.viewport(0, 0, platno1.width, platno1.height);
-                    
+                    gl.viewport(0, 0, w, h);
+
                     // postavljanje vrijednosti uniform varijabli
                     gl.uniformMatrix3fv(GPUprogram1.u_mTrans, false,
                         [1.0, 0.0, 0.0, 0.0, 1.0, 0.0, 0.0, 0.0, 1.0]); // jedinična matrica
-                    gl.uniform4fv(GPUprogram1.u_boja, [0.5, 0.0, 0.5, 0.5]); // zelena boja
-                    gl.drawArrays(gl.TRIANGLE_FAN, 0, krugVrhovi.length / 2);
+                    gl.uniform4fv(GPUprogram1.u_boja, [0.0, 1.0, 0.0, 1.0]); // zelena boja
+                    gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
+                    
+                    // let kut = Math.PI / 3;
+                    // gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
+                    //     [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
+                    // gl.uniform4fv(GPUprogram1.u_boja, [1.0, 1.0, 0.0, 1.0]); // žuta boja
+                    // gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
+
+                    // kut = Math.PI / 1.5;
+                    // gl.uniformMatrix2fv(GPUprogram1.u_mTrans, false,
+                    //     [Math.cos(kut), Math.sin(kut), -Math.sin(kut), Math.cos(kut)]);
+                    // gl.uniform4fv(GPUprogram1.u_boja, [1.0, 0.0, 0.0, 1.0]); // crvena boja
+                    // gl.drawArrays(gl.TRIANGLE_FAN, 0, vrhovi.length / 2);
                 } // iscrtaj
 
-                function iscrtajElipse() {
-                    gl.viewport(0, 0, platno1.width, platno1.height);
-
-                    elipsa(0.5, 0.0, 1);
-                    elipsa(-0.5, 0.0, 1);
-                    elipsa(0.0, 0.5, 2);
-                    elipsa(0.0, -0.5, 2);
-                    elipsa(-0.325, -0.375, 3.5);
-                    elipsa(0.325, 0.375, 3.5);
-                    elipsa(-0.325, 0.375, -3.5);
-                    elipsa(0.325, -0.375, -3.5);
-                } // iscrtaj
-
-                function elipsa(dx, dy, v){
-                    let kut = Math.PI / v;
-                    let sinKut = Math.sin(kut);
-                    let cosKut = Math.cos(kut);
-                    gl.uniformMatrix3fv(GPUprogram1.u_mTrans, false,
-                        [cosKut, sinKut, 0.0, -sinKut, cosKut, 0.0, dx, dy, 1.0]);
-                    gl.uniform4fv(GPUprogram1.u_boja, [1.0, 1.0, 0.0, 1.0]); // žuta boja
-                    gl.drawArrays(gl.TRIANGLE_FAN, 0, krugVrhovi.length / 2);
-                }
-
-                napuniSpremnike(krugVrhovi);
-                iscrtajKrug();
-                napuniSpremnike(elipsaVrhovi);
-                iscrtajElipse();
+                napuniSpremnike();
+                iscrtaj();
             } // WebGLaplikacija
 		</script>
         
@@ -138,14 +144,14 @@
 
 	<body onload=crtaj()>
         <div>
-            <div>
-                <h1>Zadaća 6</h1>
-            </div>
+            <h1>Zadaća 6</h1>
+        </div>
 
+        <div>
             <canvas id="platno" width="700" height="700">
                 Vaš preglednik ne podržava HTML5 canvas.
             </canvas>
-            <h4>Slika 1. Obojani cvijet</h4>
+            <h4>Slika 1. Elipse 2.4</h4>
 		</div>
 	</body>
     <script src="./RG-WebGL.js"></script>
