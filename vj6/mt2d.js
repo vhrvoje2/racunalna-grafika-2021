@@ -114,10 +114,16 @@ class MT2D {
     }
 
     projekcija2D(xmin, xmax, ymin, ymax) {
-        this.px = 2 / (xmax - xmin);
-        this.py = 2 / (ymax - ymin);
-        this.sx = -this.px * xmin - 1;
-        this.sy = -this.py * ymin - 1;
+        let tx = (xmin + xmax) / (xmin - xmax);
+        let ty = (ymin + ymax) / (ymin - ymax);
+        let sx = 2 / (xmax - xmin);
+        let sy = 2 / (ymax - ymin);
+
+        var m =
+            [[sx, 0, tx],
+            [0, sy, ty],
+            [0, 0, 1]];
+        this.mult(m);
     }
 
     normirajX(x) {
