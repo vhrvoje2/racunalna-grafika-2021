@@ -234,7 +234,7 @@ class MT3D {
         return listaOut;
     }
 
-    projekcija2D(xmin, xmax, ymin, ymax) {
+    projekcija3D(xmin, xmax, ymin, ymax) {
         let tx = (xmin + xmax) / (xmin - xmax);
         let ty = (ymin + ymax) / (ymin - ymax);
         let sx = 2 / (xmax - xmin);
