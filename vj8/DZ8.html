@@ -43,8 +43,8 @@
                 var u_boja = gl.getUniformLocation(GPUprogram1, "u_boja");
 
                 var mt3d = new MT3D();
-                var dKut = 50;
-                var a = 0.05;
+                var dKut = 0;
+                var a = 0.2;
                 var vrhoviKocke = [];
                 var crvena = [1, 0, 0];
                 var zelena = [0, 1, 0];
@@ -52,161 +52,131 @@
                 var ljubicasta = [0.5, 0, 1];
                 var tirkizna = [0, 1, 1];
                 var zuta = [1, 1, 0];
+                var proba = true;
+                var visina = 0.2;
+                var fVAO = gl.createVertexArray();
+                var mrezaVAO = gl.createVertexArray();
 
-                function iscrtajKocke(){
-                    gl.enable(gl.DEPTH_TEST);
-                    gl.enable(gl.CULL_FACE);
-                    gl.clearColor(0.5, 0.5, 0.5, 1);
+                var mreza = []
+
+                for (var i=-0.6; i<=0.6; i+=0.1){
+                    mreza.push(i, -0.1, -0.6);
+                    mreza.push(i, -0.1, 0.6);
+                }
+
+                for (var i=-0.6; i<=0.6; i+=0.1){
+                    mreza.push(-0.6, -0.1, i);
+                    mreza.push(0.6, -0.1, i);
+                }
+
+                iscrtajKocku(a, 0, 0);
+                iscrtajKocku(a, 0.2, 0);
+                iscrtajKocku(a, 0.4, 0);
+                iscrtajKocku(a, 0.4, 0.2);
+                iscrtajKocku(a, 0.6, 0);
+                iscrtajKocku(a, 0.8, 0);
+                iscrtajKocku(a, 0.8, 0.2);
+                iscrtajKocku(a, 0.8, 0.4);
+
+                function iscrtajF(){
+                    gl.clearColor(0.3, 0.3, 0.3, 1);
                     gl.clear(gl.COLOR_BUFFER_BIT);
                     gl.viewport(0, 0, platno1.width, platno1.height);
-                    var radijani = mt3d.kutRadijani(dKut);
-
-                    iscrtajMrezu(a, radijani);
-                    iscrtajKocku(a, radijani);
                     
-                    dKut < 360 ? dKut += 0.05 : dKut = 0;
-                    //requestAnimationFrame(iscrtajKocke);
-                }
-
-                function iscrtajKocku(a, radijani){
-                    mt3d.identitet();
-                    mt3d.rotirajX(mt3d.kutRadijani(-180));
-                    mt3d.pomakni(0, 0, a);
-                    //mt3d.rotirajY(radijani);
-                    //mt3d.rotirajX(radijani * 2);
-                    //mt3d.rotirajZ(radijani * 4);
-                    
-                    gl.uniformMatrix4fv(u_mTrans, false, mt3d.lista());
-                    vrhoviKocke = generirajKvadrat(a, crvena);
-                    napuniSpremnike(vrhoviKocke);
-                    gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
-
-
-                    mt3d.identitet();
-                    mt3d.rotirajY(mt3d.kutRadijani(-90));
-                    mt3d.pomakni(a, 0, 0);
-                    //mt3d.rotirajY(radijani);
-                    //mt3d.rotirajX(radijani * 2);
-                    //mt3d.rotirajZ(radijani * 4);
-                    
-                    gl.uniformMatrix4fv(u_mTrans, false, mt3d.lista());
-                    vrhoviKocke = generirajKvadrat(a, zelena);
-                    napuniSpremnike(vrhoviKocke);
-                    gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
-
-
-                    mt3d.identitet();
-                    mt3d.rotirajY(mt3d.kutRadijani(90));
-                    mt3d.pomakni(-a, 0, 0);
-                    //mt3d.rotirajY(radijani);
-                    //mt3d.rotirajX(radijani * 2);
-                    //mt3d.rotirajZ(radijani * 4);
-                    
-                    gl.uniformMatrix4fv(u_mTrans, false, mt3d.lista());
-                    vrhoviKocke = generirajKvadrat(a, plava);
-                    napuniSpremnike(vrhoviKocke);
-                    gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
-
-
-                    mt3d.identitet();
-                    mt3d.pomakni(0, 0, -a);
-                    //mt3d.rotirajY(radijani);
-                    //mt3d.rotirajX(radijani * 2);
-                    //mt3d.rotirajZ(radijani * 4);
-                    
-                    gl.uniformMatrix4fv(u_mTrans, false, mt3d.lista());
-                    vrhoviKocke = generirajKvadrat(a, ljubicasta);
-                    napuniSpremnike(vrhoviKocke);
-                    gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
-
-
-                    mt3d.identitet();
-                    mt3d.rotirajX(mt3d.kutRadijani(-90));
-                    mt3d.pomakni(0, -a, 0);
-                    //mt3d.rotirajY(radijani);
-                    //mt3d.rotirajX(radijani * 2);
-                    //mt3d.rotirajZ(radijani * 4);
-                    
-                    gl.uniformMatrix4fv(u_mTrans, false, mt3d.lista());
-                    vrhoviKocke = generirajKvadrat(a, tirkizna);
-                    napuniSpremnike(vrhoviKocke);
-                    gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
-
-
-                    mt3d.identitet();
-                    mt3d.rotirajX(mt3d.kutRadijani(90));
-                    mt3d.pomakni(0, a, 0);
-                    //mt3d.rotirajY(radijani);
-                    //mt3d.rotirajX(radijani * 2);
-                    //mt3d.rotirajZ(radijani * 4);
-                    
-                    gl.uniformMatrix4fv(u_mTrans, false, mt3d.lista());
-                    vrhoviKocke = generirajKvadrat(a, zuta);
-                    napuniSpremnike(vrhoviKocke);
-                    gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
-                }
-                
-                function iscrtajMrezu(a, radijani){
-                    var vrhovi = [[-a, -a, 0, 1, 1, 1],
-                                  [-a, a, 0, 1, 1, 1],
-                                  [a, a, 0, 1, 1, 1],
-                                  [a, -a, 0, 1, 1, 1]];
-
-                    napuniSpremnike(vrhovi);
-
-                    mt3d.identitet();
-                    mt3d.pomakni(0, 0, 4 * a);
-                    //mt3d.rotirajY(radijani);
-                    //mt3d.rotirajX(radijani * 2);
-                    //mt3d.rotirajZ(radijani * 4);
-                    mt3d.pomakni(-12 * a, -12 * a, 0);
-                    
-                    for (var i=-12; i<=12; i+=2){
-                        for (var j=-10; j<12; j+=2){
-                            mt3d.identitet();
-                            mt3d.pomakni(0, 0, a);
-                            mt3d.pomakni(i * a, j * a, 0);
-                            //mt3d.rotirajY(radijani);
-                            //mt3d.rotirajX(radijani * 2);
-                            //mt3d.rotirajZ(radijani * 4);
-                            gl.uniformMatrix4fv(u_mTrans, false, mt3d.lista());
-                            gl.drawArrays(gl.LINE_LOOP, 0, vrhovi.length);
-                        }
-                        mt3d.pomakni(2 * a, -24 * a, 0);
+                    if (dKut === 360){
+                        visina > 0.8 ? visina = 0.2 : visina += 0.4;
                     }
-                }
-                
-                function generirajKvadrat(a, boja){
-                    var vrhovi = [[-a, a, 0, ...boja],
-                                  [-a, -a, 0, ...boja],
-                                  [a, -a, 0, ...boja],
-                                  [a, a, 0, ...boja],
-                                  [-a, a, 0, ...boja],
-                                  [a, -a, 0, ...boja]];
+                    
+                    dKut > 360 ? dKut = 0 : dKut += 0.75;
 
-                    return vrhovi;
+                    mt3d.identitet();
+                    mt3d.persp(-1, 1, -1, 1, 0.5, 15);
+                    mt3d.postaviKameru(1, visina, 1, 0, 0, 0, 0, 1, 0);
+                    mt3d.rotirajY(dKut);
+    
+                    gl.uniformMatrix4fv(GPUprogram1.u_mTrans, false, mt3d.lista());
+                    gl.bindVertexArray(fVAO);
+                    gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
+    
+                    gl.bindVertexArray(mrezaVAO);
+                    gl.drawArrays(gl.LINES, 0, mreza.length);
+                    requestAnimationFrame(iscrtajF);
+                }
+
+                function iscrtajKocku(a, dy, dx) {
+                    vrhoviKocke.push(
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...zuta],
+                        [a / 2, a / 2 + dy, a / 2 + dx, ...zuta],
+                        [a / 2, a / 2 + dy, -a / 2 + dx, ...zuta],
+                        [a / 2, a / 2 + dy, -a / 2 + dx, ...zuta],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...zuta],
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...zuta],
+                        [a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...ljubicasta],
+                        [a / 2, a / 2 + dy, -a / 2 + dx, ...ljubicasta],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...ljubicasta],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...ljubicasta],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...ljubicasta],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...ljubicasta],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...tirkizna],
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...tirkizna],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...tirkizna],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...tirkizna],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...tirkizna],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...tirkizna],
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...zelena],
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...zelena],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...zelena],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...zelena],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...zelena],
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...zelena],
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...plava],
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...plava],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...plava],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...plava],
+                        [a / 2, a / 2 + dy, a / 2 + dx, ...plava],
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...plava]
+                    );
                 }
                 
-                function napuniSpremnike(vrhovi) {
+                function napuniSpremnike() {
+                    GPUprogram1.a_vrhXYZ = gl.getAttribLocation(GPUprogram1, "a_vrhXYZ");
+                    GPUprogram1.u_mTrans = gl.getUniformLocation(GPUprogram1, "u_mTrans");
+                    GPUprogram1.a_boja = gl.getAttribLocation(GPUprogram1, "a_boja");
                     var vertexBuffer = gl.createBuffer();
                     gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
             
                     // povezivanje s atribut varijablama u programu za sjenčanje
-                    let a_vrhXYZ = gl.getAttribLocation(GPUprogram1, "a_vrhXYZ");
-                    let a_boja = gl.getAttribLocation(GPUprogram1, "a_boja");
-                    
-                    var vertexBuffer = gl.createBuffer();
-                    gl.bindBuffer(gl.ARRAY_BUFFER, vertexBuffer);
-                    gl.enableVertexAttribArray(a_vrhXYZ);
-                    gl.enableVertexAttribArray(a_boja);
-                    gl.vertexAttribPointer(a_vrhXYZ, 3, gl.FLOAT, false, 24, 0);
-                    gl.vertexAttribPointer(a_boja, 3, gl.FLOAT, false, 24, 12);
+                    GPUprogram1.a_vrhXYZ = gl.getAttribLocation(GPUprogram1, "a_vrhXYZ");
+                    GPUprogram1.a_boja = gl.getAttribLocation(GPUprogram1, "a_boja");
+                    GPUprogram1.u_mTrans = gl.getUniformLocation(GPUprogram1, "u_mTrans");
 
+                    gl.bindVertexArray(fVAO);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+                    gl.enableVertexAttribArray(GPUprogram1.a_vrhXYZ);
+                    gl.enableVertexAttribArray(GPUprogram1.a_boja);
+                    gl.vertexAttribPointer(GPUprogram1.a_vrhXYZ, 3, gl.FLOAT, false, 24, 0);
+                    gl.vertexAttribPointer(GPUprogram1.a_boja, 3, gl.FLOAT, false, 24, 12);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vrhoviKocke.flat()), gl.STATIC_DRAW);
+
+                    gl.bindVertexArray(mrezaVAO);
+                    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
+                    gl.enableVertexAttribArray(GPUprogram1.a_vrhXYZ);
+                    gl.vertexAttribPointer(GPUprogram1.a_vrhXYZ, 3, gl.FLOAT, false, 12, 0);
                     // punjenje spremnika - podaci koji se šalju na GPU
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vrhovi.flat()), gl.STATIC_DRAW);
+                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mreza.flat()), gl.STATIC_DRAW);
+                    gl.vertexAttrib3f(GPUprogram1.a_boja, 0.5, 0.5, 1);
+
+                    gl.enable(gl.DEPTH_TEST);
                 } // napuniSpremnike
                 
-                iscrtajKocke();
+                napuniSpremnike();
+                iscrtajF();
             } // WebGLaplikacija
 		</script>
         
@@ -245,7 +215,7 @@
             <canvas id="platno" width="700" height="700">
                 Vaš preglednik ne podržava HTML5 canvas.
             </canvas>
-            <h4>Slika 1. Perspektivna projekcija</h4>
+            <h4>Slika 1. Slovo F</h4>
 		</div>
 	</body>
     <script src="./RG-WebGL.js"></script>
