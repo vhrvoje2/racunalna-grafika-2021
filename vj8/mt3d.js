@@ -1,87 +1,136 @@
 class MT3D {
     constructor() {
-        this.matrica = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
-        this.kamera = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+        this.matrica = [[1, 0, 0, 0],
+                        [0, 1, 0, 0],
+                        [0, 0, 1, 0],
+                        [0, 0, 0, 1]];
+        this.kamera = [[1, 0, 0, 0],
+                       [0, 1, 0, 0],
+                       [0, 0, 1, 0],
+                       [0, 0, 0, 1]];
     }
 
     identitet() {
-        var m = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+        var m = [[1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]];
         this.matrica = m;
     }
 
     pomakni(px, py, pz) {
-        var m = [[1, 0, 0, px], [0, 1, 0, py], [0, 0, 1, pz], [0, 0, 0, 1]];
+        var m = [[1, 0, 0, px],
+                [0, 1, 0, py],
+                [0, 0, 1, pz],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
     skaliraj(sx, sy, sz) {
-        var m = [[sx, 0, 0, 0], [0, sy, 0, 0], [0, 0, sz, 0], [0, 0, 0, 1]];
+        var m = [[sx, 0, 0, 0],
+                [0, sy, 0, 0],
+                [0, 0, sz, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
     zrcaliNaX() {
-        var m = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]];
+        var m = [[1, 0, 0, 0],
+                [0, -1, 0, 0],
+                [0, 0, -1, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
     zrcaliNaY() {
-        var m = [[-1, 0, 0, 0], [0, 1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]];
+        var m = [[-1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, -1, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
     zrcaliNaZ() {
-        var m = [[-1, 0, 0, 0], [0, -1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+        var m = [[-1, 0, 0, 0],
+                [0, -1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
     zrcaliNaXY() {
-        var m = [[1, 0, 0, 0], [0, 1, 0, 0], [0, 0, -1, 0], [0, 0, 0, 1]];
+        var m = [[1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, -1, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
     zrcaliNaXZ() {
-        var m = [[1, 0, 0, 0], [0, -1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+        var m = [[1, 0, 0, 0],
+                [0, -1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
     zrcaliNaYZ() {
-        var m = [[-1, 0, 0, 0], [0, 1, 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+        var m = [[-1, 0, 0, 0],
+                [0, 1, 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
-    rotirajX(kutRotacije) {
-        var kut = (kutRotacije * Math.PI) / 180;
-        var m = [[1, 0, 0, 0], [0, Math.cos(kut), -Math.sin(kut), 0], [0, Math.sin(kut), Math.cos(kut), 0], [0, 0, 0, 1]];
+    rotirajX(k) {
+        var kut = (k * Math.PI) / 180;
+        var m = [[1, 0, 0, 0],
+                [0, Math.cos(kut), -Math.sin(kut), 0],
+                [0, Math.sin(kut), Math.cos(kut), 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
-    rotirajY(kutRotacije) {
-        var kut = (kutRotacije * Math.PI) / 180;
-        var m = [[Math.cos(kut), 0, Math.sin(kut), 0], [0, 1, 0, 0], [-Math.sin(kut), 0, Math.cos(kut), 0], [0, 0, 0, 1]];
+    rotirajY(k) {
+        var kut = (k * Math.PI) / 180;
+        var m = [[Math.cos(kut), 0, Math.sin(kut), 0],
+                [0, 1, 0, 0],
+                [-Math.sin(kut), 0, Math.cos(kut), 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
-    rotirajZ(kutRotacije) {
-        var kut = (kutRotacije * Math.PI) / 180;
-        var m = [[Math.cos(kut), -Math.sin(kut), 0, 0], [Math.sin(kut), Math.cos(kut), 0, 0], [0, 0, 1, 0], [0, 0, 0, 1]];
+    rotirajZ(k) {
+        var kut = (k * Math.PI) / 180;
+        var m = [[Math.cos(kut), -Math.sin(kut), 0, 0],
+                [Math.sin(kut),Math.cos(kut), 0, 0],
+                [0, 0, 1, 0],
+                [0, 0, 0, 1]];
         this.mult(m);
     }
 
-    rotiraj(kutRotacije) {
-        var kut = kutRotacije * (Math.PI / 180)
-        var m = [[Math.cos(kut), -1 * (Math.sin(kut)), 0], [Math.sin(kut), Math.cos(kut), 0], [0, 0, 1]];
+    rotiraj(k) {
+        var kut = k * (Math.PI / 180)
+        var m = [[Math.cos(kut), -1 * (Math.sin(kut)), 0],
+                [Math.sin(kut), Math.cos(kut), 0],
+                [0, 0, 1]];
         this.mult(m);
     }
 
     smicanje(alfa1, beta1) {
         var alfa = alfa1 * (Math.PI / 180);
         var beta = beta1 * (Math.PI / 180);
-        var m = [[1, Math.tan(beta), 0], [Math.tan(alfa), 1, 0], [0, 0, 1]];
+        var m = [[1, Math.tan(beta), 0],
+                [Math.tan(alfa), 1, 0],
+                [0, 0, 1]];
         this.mult(m);
     }
 
     mult(m) {
-        var m1 = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+        var m1 = [[0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0],
+                 [0, 0, 0, 0]];
         for (var i = 0; i < 4; i++) {
             for (var j = 0; j < 4; j++) {
                 for (var k = 0; k < 4; k++) {
@@ -94,11 +143,11 @@ class MT3D {
 
     zrcaliNa(k, l) {
         var kut = Math.atan(k);
-        var pretvoreniKut = kut * (180 / Math.PI);
+        var kutRadijani = kut * (180 / Math.PI);
         this.pomakni(0, l);
-        this.rotiraj(pretvoreniKut);
+        this.rotiraj(kutRadijani);
         this.zrcaliNaX();
-        this.rotiraj(-pretvoreniKut);
+        this.rotiraj(-kutRadijani);
         this.pomakni(0, -l);
     }
 
@@ -126,16 +175,19 @@ class MT3D {
     }
 
     mnoziMatrice(m1, m2) {
-        var novaMatrica = [[0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0], [0, 0, 0, 0]];
+        var m1 = [[0, 0, 0, 0],
+                          [0, 0, 0, 0],
+                          [0, 0, 0, 0],
+                          [0, 0, 0, 0]];
 
         for (var i = 0; i < 4; i++) {
             for (var j = 0; j < 4; j++) {
                 for (var k = 0; k < 4; k++) {
-                    novaMatrica[i][j] += m1[i][k] * m2[k][j];
+                    m1[i][j] += m1[i][k] * m2[k][j];
                 }
             }
         }
-        return novaMatrica;
+        return m1;
     }
 
     VP(u, v) {
@@ -163,11 +215,17 @@ class MT3D {
     }
 
     persp(xmin, xmax, ymin, ymax, zpr, zst) {
-        var kamera2 = [[(2 * zpr) / (xmax - xmin), 0, (xmax + xmin) / (xmax - xmin), 0],
-        [0, (2 * zpr) / (ymax - ymin), (ymax + ymin) / (ymax - ymin), 0],
-        [0, 0, (zpr + zst) / (zpr - zst), (2 * zpr * zst) / (zpr - zst)],
-        [0, 0, -1, 0]];
-        this.mult(kamera2);
+        var sx = (2 * zpr) / (xmax - xmin);
+        var sy = (2 * zpr) / (ymax - ymin);
+        var sz = (zpr + zst) / (zpr - zst);
+        var tx = (xmax + xmin) / (xmax - xmin);
+        var ty = (ymax + ymin) / (ymax - ymin);
+        var tz = (2 * zpr * zst) / (zpr - zst);
+        var _kamera = [[sx, 0, tx, 0],
+                        [0, sy, ty, 0],
+                        [0, 0, sz, tz],
+                        [0, 0, -1, 0]];
+        this.mult(_kamera);
 
     }
 
