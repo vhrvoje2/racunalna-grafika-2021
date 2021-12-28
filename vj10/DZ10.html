@@ -43,7 +43,8 @@
                 var u_boja = gl.getUniformLocation(GPUprogram1, "u_boja");
 
                 var mt3d = new MT3D();
-                var dKut = 0;
+                var kut = 120;
+                var dKut = 1.25;
                 var a = 0.1;
                 var vrhoviKocke = [];
                 var crvena = [1, 0, 0];
@@ -52,70 +53,66 @@
                 var ljubicasta = [0.5, 0, 1];
                 var tirkizna = [0, 1, 1];
                 var zuta = [1, 1, 0];
-                var visina = 0.2;
+                var visina = 0.5;
+                var maxVisina = 1;
+                var dVisina = 0.005;
+                var smjerGore = 1;
                 var fVAO = gl.createVertexArray();
-                var mrezaVAO = gl.createVertexArray();
-
-                var mreza = []
-
-                for (var i=-0.6; i<=0.6; i+=0.1){
-                    mreza.push(i, -0.1, -0.6);
-                    mreza.push(i, -0.1, 0.6);
-                }
-
-                for (var i=-0.6; i<=0.6; i+=0.1){
-                    mreza.push(-0.6, -0.1, i);
-                    mreza.push(0.6, -0.1, i);
-                }
 
                 // F
+                iscrtajKocku(a, -0.05, -0.25);
+                iscrtajKocku(a, 0.1 - 0.05, -0.25);
+                iscrtajKocku(a, 0.2 - 0.05, -0.25);
+                iscrtajKocku(a, 0.2 - 0.05, -0.15);
+                iscrtajKocku(a, 0.3 - 0.05, -0.25);
+                iscrtajKocku(a, 0.4 - 0.05, -0.25);
+                iscrtajKocku(a, 0.4 - 0.05, -0.15);
+                iscrtajKocku(a, 0.4 - 0.05, -0.05);
+
+                // o
                 iscrtajKocku(a, -0.05, 0);
                 iscrtajKocku(a, 0.1 - 0.05, 0);
                 iscrtajKocku(a, 0.2 - 0.05, 0);
                 iscrtajKocku(a, 0.2 - 0.05, 0.1);
-                iscrtajKocku(a, 0.3 - 0.05, 0);
-                iscrtajKocku(a, 0.4 - 0.05, 0);
-                iscrtajKocku(a, 0.4 - 0.05, 0.1);
-                iscrtajKocku(a, 0.4 - 0.05, 0.2);
-
-                // o
-                iscrtajKocku(a, -0.05, 0.25);
-                iscrtajKocku(a, 0.1 - 0.05, 0.25);
-                iscrtajKocku(a, 0.2 - 0.05, 0.25);
-                iscrtajKocku(a, 0.2 - 0.05, 0.35);
-                iscrtajKocku(a, -0.05, 0.45);
-                iscrtajKocku(a, -0.05, 0.35);
-                iscrtajKocku(a, 0.1 - 0.05, 0.45);
-                iscrtajKocku(a, 0.2 - 0.05, 0.45);
+                iscrtajKocku(a, -0.05, 0.2);
+                iscrtajKocku(a, -0.05, 0.1);
+                iscrtajKocku(a, 0.1 - 0.05, 0.2);
+                iscrtajKocku(a, 0.2 - 0.05, 0.2);
                 
                 // i
-                iscrtajKocku(a, -0.05, 0.6);
-                iscrtajKocku(a, 0.1 - 0.05, 0.6);
-                iscrtajKocku(a, 0.2 - 0.05, 0.6);
-                iscrtajKocku(a, 0.31 - 0.05, 0.6);
+                iscrtajKocku(a, -0.05, 0.35);
+                iscrtajKocku(a, 0.1 - 0.05, 0.35);
+                iscrtajKocku(a, 0.2 - 0.05, 0.35);
+                iscrtajKocku(a, 0.31 - 0.05, 0.35);
 
                 function iscrtaj(){
                     gl.clearColor(0.3, 0.3, 0.3, 1);
                     gl.clear(gl.COLOR_BUFFER_BIT);
                     gl.viewport(0, 0, platno1.width, platno1.height);
                     
-                    if (dKut === 360){
-                        visina > 0.8 ? visina = 0.2 : visina += 0.4;
-                    }
+                    kut > 360 ? kut = 0 : kut += dKut;
                     
-                    dKut > 360 ? dKut = 0 : dKut += 1.5;
+                    if (smjerGore){
+                        visina += dVisina;
+                        if (visina >= maxVisina) {
+                            smjerGore = 0;
+                        }
+                    }
+                    else {
+                        visina -= dVisina;
+                        if (visina <= -maxVisina) {
+                            smjerGore = 1;
+                        }
+                    }
 
                     mt3d.identitet();
                     mt3d.persp(-1, 1, -1, 1, 0.5, 15);
-                    mt3d.postaviKameru(1, visina, 1, 0, 0, 0, 0, 1, 0);
-                    mt3d.rotirajY(dKut);
+                    mt3d.postaviKameru(0.75, visina, 0.75, 0, 0, 0, 0, 1, 0);
+                    mt3d.rotirajY(kut);
     
                     gl.uniformMatrix4fv(GPUprogram1.u_mTrans, false, mt3d.lista());
                     gl.bindVertexArray(fVAO);
                     gl.drawArrays(gl.TRIANGLES, 0, vrhoviKocke.length);
-    
-                    gl.bindVertexArray(mrezaVAO);
-                    gl.drawArrays(gl.LINES, 0, mreza.length);
                     requestAnimationFrame(iscrtaj);
                 }
 
@@ -179,15 +176,6 @@
                     gl.vertexAttribPointer(GPUprogram1.a_vrhXYZ, 3, gl.FLOAT, false, 24, 0);
                     gl.vertexAttribPointer(GPUprogram1.a_boja, 3, gl.FLOAT, false, 24, 12);
                     gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(vrhoviKocke.flat()), gl.STATIC_DRAW);
-
-                    gl.bindVertexArray(mrezaVAO);
-                    gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-                    gl.enableVertexAttribArray(GPUprogram1.a_vrhXYZ);
-                    gl.vertexAttribPointer(GPUprogram1.a_vrhXYZ, 3, gl.FLOAT, false, 12, 0);
-                    // punjenje spremnika - podaci koji se šalju na GPU
-                    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(mreza.flat()), gl.STATIC_DRAW);
-                    gl.vertexAttrib3f(GPUprogram1.a_boja, 0.5, 0.5, 1);
-
                     gl.enable(gl.DEPTH_TEST);
                 } // napuniSpremnike
                 
