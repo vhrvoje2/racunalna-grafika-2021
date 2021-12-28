@@ -3,7 +3,7 @@
 <html lang="hr">
 	<head>
 		<meta charset="UTF-8">
-		<title>Zadaća 8</title>
+		<title>Zadaća 10</title>
         <style>
             h1 {
                 text-transform: uppercase;
@@ -44,7 +44,7 @@
 
                 var mt3d = new MT3D();
                 var dKut = 0;
-                var a = 0.2;
+                var a = 0.1;
                 var vrhoviKocke = [];
                 var crvena = [1, 0, 0];
                 var zelena = [0, 1, 0];
@@ -68,16 +68,33 @@
                     mreza.push(0.6, -0.1, i);
                 }
 
-                iscrtajKocku(a, 0, 0);
-                iscrtajKocku(a, 0.2, 0);
-                iscrtajKocku(a, 0.4, 0);
-                iscrtajKocku(a, 0.4, 0.2);
-                iscrtajKocku(a, 0.6, 0);
-                iscrtajKocku(a, 0.8, 0);
-                iscrtajKocku(a, 0.8, 0.2);
-                iscrtajKocku(a, 0.8, 0.4);
+                // F
+                iscrtajKocku(a, -0.05, 0);
+                iscrtajKocku(a, 0.1 - 0.05, 0);
+                iscrtajKocku(a, 0.2 - 0.05, 0);
+                iscrtajKocku(a, 0.2 - 0.05, 0.1);
+                iscrtajKocku(a, 0.3 - 0.05, 0);
+                iscrtajKocku(a, 0.4 - 0.05, 0);
+                iscrtajKocku(a, 0.4 - 0.05, 0.1);
+                iscrtajKocku(a, 0.4 - 0.05, 0.2);
 
-                function iscrtajF(){
+                // o
+                iscrtajKocku(a, -0.05, 0.25);
+                iscrtajKocku(a, 0.1 - 0.05, 0.25);
+                iscrtajKocku(a, 0.2 - 0.05, 0.25);
+                iscrtajKocku(a, 0.2 - 0.05, 0.35);
+                iscrtajKocku(a, -0.05, 0.45);
+                iscrtajKocku(a, -0.05, 0.35);
+                iscrtajKocku(a, 0.1 - 0.05, 0.45);
+                iscrtajKocku(a, 0.2 - 0.05, 0.45);
+                
+                // i
+                iscrtajKocku(a, -0.05, 0.6);
+                iscrtajKocku(a, 0.1 - 0.05, 0.6);
+                iscrtajKocku(a, 0.2 - 0.05, 0.6);
+                iscrtajKocku(a, 0.31 - 0.05, 0.6);
+
+                function iscrtaj(){
                     gl.clearColor(0.3, 0.3, 0.3, 1);
                     gl.clear(gl.COLOR_BUFFER_BIT);
                     gl.viewport(0, 0, platno1.width, platno1.height);
@@ -99,7 +116,7 @@
     
                     gl.bindVertexArray(mrezaVAO);
                     gl.drawArrays(gl.LINES, 0, mreza.length);
-                    requestAnimationFrame(iscrtajF);
+                    requestAnimationFrame(iscrtaj);
                 }
 
                 function iscrtajKocku(a, dy, dx) {
@@ -175,7 +192,7 @@
                 } // napuniSpremnike
                 
                 napuniSpremnike();
-                iscrtajF();
+                iscrtaj();
             } // WebGLaplikacija
 		</script>
         
@@ -208,13 +225,13 @@
 	<body onload=crtaj()>
         <div>
             <div>
-                <h1>Zadaća 8</h1>
+                <h1>Zadaća 10</h1>
             </div>
 
             <canvas id="platno" width="700" height="700">
                 Vaš preglednik ne podržava HTML5 canvas.
             </canvas>
-            <h4>Slika 1. Slovo F</h4>
+            <h4>Slika 1. Foi logo</h4>
 		</div>
 	</body>
     <script src="./RG-WebGL.js"></script>
