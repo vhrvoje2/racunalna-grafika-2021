@@ -47,12 +47,8 @@
                 var dKut = 1.25;
                 var a = 0.1;
                 var vrhoviKocke = [];
-                var crvena = [1, 0, 0];
-                var zelena = [0, 1, 0];
-                var plava = [0, 0, 1];
-                var ljubicasta = [0.5, 0, 1];
-                var tirkizna = [0, 1, 1];
-                var zuta = [1, 1, 0];
+                var narancasta = [248/255, 179/255, 35/255];
+                var crvena = [206/255, 0, 61/255];
                 var visina = 0.5;
                 var maxVisina = 1;
                 var dVisina = 0.005;
@@ -83,7 +79,7 @@
                 iscrtajKocku(a, -0.05, 0.35);
                 iscrtajKocku(a, 0.1 - 0.05, 0.35);
                 iscrtajKocku(a, 0.2 - 0.05, 0.35);
-                iscrtajKocku(a, 0.31 - 0.05, 0.35);
+                iscrtajKocku(a, 0.31 - 0.04, 0.35);
 
                 function iscrtaj(){
                     gl.clearColor(0.3, 0.3, 0.3, 1);
@@ -107,7 +103,7 @@
 
                     mt3d.identitet();
                     mt3d.persp(-1, 1, -1, 1, 0.5, 15);
-                    mt3d.postaviKameru(0.75, visina, 0.75, 0, 0, 0, 0, 1, 0);
+                    mt3d.postaviKameru(0.7, visina, 0.7, 0, 0, 0, 0, 1, 0);
                     mt3d.rotirajY(kut);
     
                     gl.uniformMatrix4fv(GPUprogram1.u_mTrans, false, mt3d.lista());
@@ -118,42 +114,47 @@
 
                 function iscrtajKocku(a, dy, dx) {
                     vrhoviKocke.push(
-                        [a / 2, -a / 2 + dy, a / 2 + dx, ...zuta],
-                        [a / 2, a / 2 + dy, a / 2 + dx, ...zuta],
-                        [a / 2, a / 2 + dy, -a / 2 + dx, ...zuta],
-                        [a / 2, a / 2 + dy, -a / 2 + dx, ...zuta],
-                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...zuta],
-                        [a / 2, -a / 2 + dy, a / 2 + dx, ...zuta],
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...crvena],
                         [a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
-                        [-a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
-                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
-                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
                         [a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...crvena],
+
+                        [a / 2, a / 2 + dy, a / 2 + dx, ...narancasta],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...narancasta],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [a / 2, a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [a / 2, a / 2 + dy, a / 2 + dx, ...narancasta],
+
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [a / 2, a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...narancasta],
+
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...crvena],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...crvena],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
+
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...narancasta],
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...narancasta],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...narancasta],
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...narancasta],
+
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...crvena],
+                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...crvena],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
+                        [-a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
                         [a / 2, a / 2 + dy, a / 2 + dx, ...crvena],
-                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...ljubicasta],
-                        [a / 2, a / 2 + dy, -a / 2 + dx, ...ljubicasta],
-                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...ljubicasta],
-                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...ljubicasta],
-                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...ljubicasta],
-                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...ljubicasta],
-                        [-a / 2, a / 2 + dy, a / 2 + dx, ...tirkizna],
-                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...tirkizna],
-                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...tirkizna],
-                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...tirkizna],
-                        [-a / 2, a / 2 + dy, -a / 2 + dx, ...tirkizna],
-                        [-a / 2, a / 2 + dy, a / 2 + dx, ...tirkizna],
-                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...zelena],
-                        [a / 2, -a / 2 + dy, a / 2 + dx, ...zelena],
-                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...zelena],
-                        [a / 2, -a / 2 + dy, -a / 2 + dx, ...zelena],
-                        [-a / 2, -a / 2 + dy, -a / 2 + dx, ...zelena],
-                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...zelena],
-                        [a / 2, -a / 2 + dy, a / 2 + dx, ...plava],
-                        [-a / 2, -a / 2 + dy, a / 2 + dx, ...plava],
-                        [-a / 2, a / 2 + dy, a / 2 + dx, ...plava],
-                        [-a / 2, a / 2 + dy, a / 2 + dx, ...plava],
-                        [a / 2, a / 2 + dy, a / 2 + dx, ...plava],
-                        [a / 2, -a / 2 + dy, a / 2 + dx, ...plava]
+                        [a / 2, -a / 2 + dy, a / 2 + dx, ...crvena]
                     );
                 }
                 
